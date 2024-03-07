@@ -1,26 +1,59 @@
-// screens/Login.js
-import React, { useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, TextInput, TouchableOpacity, StatusBar } from 'react-native';
+import { BackHandler } from 'react-native';
+
 import { Picker } from '@react-native-picker/picker';
+import Modal from 'react-native-modal';
+import { useUserContext } from '../hooks/UserContext';
 
 const Login = ({ navigation }) => {
+  const { login, user } = useUserContext();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [selectedType, setSelectedType] = useState('C.U.IT.'); // Estado para la selección del tipo
-  const [focusedInput, setFocusedInput] = useState(null); // Nuevo estado para rastrear el elemento enfocado
+  const [selectedType, setSelectedType] = useState('C.U.I.T.');
+  const [focusedInput, setFocusedInput] = useState(null);
+  const [errorText, setErrorText] = useState('');
+  const [isExitModalVisible, setExitModalVisible] = useState(false);
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      setExitModalVisible(true);
+      return true; // Evita el comportamiento predeterminado de retroceso
+    });
+
+    return () => backHandler.remove();
+  }, []);
 
   const handleLogin = () => {
-    // Aquí deberías verificar el usuario y contraseña usando tu hook correspondiente.
-    // Después, descargar el catálogo con otro método del hook.
-    // Luego, navegar a la siguiente vista.
+    if (!username || !password) {
+      setErrorText('Por favor, completa todos los campos');
+      return;
+    } else {
+      setErrorText('');
+    }
+    login(username, password, selectedType);
+  };
+
+  const handleExitCancel = () => {
+    setExitModalVisible(false);
+  };
+
+  const handleContinueWithoutLogin = () => {
+    navigation.navigate('HomeScreen'); 
+  };
+
+  const handleExitConfirm = () => {
+    setExitModalVisible(false);
+    BackHandler.exitApp(); // Cierra la aplicación
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', marginTop: 50 }}>
+    <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', marginTop: StatusBar.currentHeight || 0}}>
       <Image source={require('../assets/images/diesel_logo_transparent.png')} style={{ width: 150, height: 150, borderRadius: 25, resizeMode: 'stretch' }} />
 
       {/* Agregar el selector de tipo */}
-      <View style={{ borderBottomWidth: 1, borderBottomColor: focusedInput === 'picker' ? 'blue' : 'gray', width: '80%', marginBottom: 10 }}>
+      <View style={{ borderBottomWidth: 1, borderBottomColor: focusedInput === 'picker' ? 'blue' : 'gray', width: '80%', marginBottom: 10, marginTop: 10 }}>
         <Picker
           selectedValue={selectedType}
           onValueChange={(itemValue) => setSelectedType(itemValue)}
@@ -28,7 +61,7 @@ const Login = ({ navigation }) => {
           onFocus={() => setFocusedInput('picker')}
           onBlur={() => setFocusedInput(null)}
         >
-          <Picker.Item label="C.U.IT." value="C.U.IT." />
+          <Picker.Item label="C.U.I.T." value="C.U.I.T." />
           <Picker.Item label="C.N.P.J." value="C.N.P.J." />
           <Picker.Item label="R.F.C." value="R.F.C." />
           <Picker.Item label="R.U.T." value="R.U.T." />
@@ -69,9 +102,31 @@ const Login = ({ navigation }) => {
       </TouchableOpacity>
 
       {/* Botón Continuar sin Iniciar Sesión */}
-      <TouchableOpacity onPress={() => navigation.navigate('Home')} style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5 }}>
+      <TouchableOpacity onPress={handleContinueWithoutLogin} style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5 }}>
         <Text>Continuar sin Iniciar Sesión</Text>
       </TouchableOpacity>
+
+      {/* Mostrar mensaje de error y línea si existe */}
+      {errorText ? (
+        <>
+          <Text style={{ color: 'red', marginTop: 10 }}>{errorText}</Text>
+          <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, width: '80%' }} />
+        </>
+      ) : null}
+
+      {/* Modal de confirmación de salida */}
+      <Modal isVisible={isExitModalVisible}>
+        <View style={{ alignSelf: 'center', justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', borderRadius: 10, padding: 20, width: '80%' }}>
+          <Text style={{ marginBottom: 10 }}>¿Seguro que desea salir de la aplicación?</Text>
+          <TouchableOpacity onPress={handleExitCancel} style={{ backgroundColor: 'orange', padding: 10, marginVertical: 10, width: '100%', alignItems: 'center', borderRadius: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5 }}>
+            <Text style={{ color: 'white' }}>Cancelar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleExitConfirm} style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '100%', alignItems: 'center', borderRadius: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5 }}>
+            <Text>Aceptar</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+
     </View>
   );
 };

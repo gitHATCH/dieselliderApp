@@ -1,21 +1,20 @@
-// CatalogContext.js
-import React, { createContext, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const CatalogContext = createContext();
 
 const CatalogProvider = ({ children }) => {
 
-  const loadCatalog = async () => {
-    // Simulamos una carga de catálogo con un timeout
-    console.log('Cargando catálogo...');
-  };
+  const [catalog, setCatalog] = useState(null)
 
-  useEffect(() => {
-    // Puedes realizar acciones adicionales cuando se carga el componente.
-  }, []);
+  const loadCatalog = async () => {
+    setTimeout(() => {
+      setCatalog({})
+    }, 2000);
+  };
 
   const contextValue = {
     loadCatalog,
+    catalog
   };
 
   return (
