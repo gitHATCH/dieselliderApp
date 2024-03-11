@@ -7,12 +7,16 @@ const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null)
 
   const login = async (username,password,idType) => {
-    setUser("saf")
-    console.log(username,password,idType);
+    setUser("User")
   };
+
+  const logout = async () => {
+    setUser(null)
+  }
 
   const contextValue = {
     login,
+    logout,
     user
   };
 

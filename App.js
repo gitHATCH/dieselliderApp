@@ -8,6 +8,12 @@ import { UserProvider } from './hooks/UserContext';
 import CatalogLoader from './screens/CatalogLoader';
 import Login from './screens/Login';
 import HomeScreen from './screens/HomeScreen';
+import TurboParts from './screens/TurboParts';
+import OtherProducts from './screens/OtherProducts';
+import OrderStatus from './screens/OrderStatus';
+import AccountCondition from './screens/AccountCondition';
+import UserData from './screens/UserData';
+import MyOrder from './screens/MyOrder';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +26,12 @@ const App = () => {
             <Stack.Screen name="CatalogLoader" component={CatalogLoader} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
+            <Stack.Screen name="TurboParts" component={TurboParts} />
+            <Stack.Screen name="OtherProducts" component={OtherProducts} />
+            <Stack.Screen name="OrderStatus" component={OrderStatus} />
+            <Stack.Screen name="AccountCondition" component={AccountCondition} />
+            <Stack.Screen name="UserData" component={UserData} />
+            <Stack.Screen name="MyOrder" component={MyOrder} />
             {/* Agrega más pantallas según tus necesidades */}
           </Stack.Navigator>
         </NavigationContainer>

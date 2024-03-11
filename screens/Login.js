@@ -33,6 +33,11 @@ const Login = ({ navigation }) => {
       setErrorText('');
     }
     login(username, password, selectedType);
+    navigation.navigate('HomeScreen'); 
+    setUsername("");
+    setPassword("");
+    setSelectedType('C.U.I.T.');
+
   };
 
   const handleExitCancel = () => {
@@ -50,7 +55,7 @@ const Login = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', marginTop: StatusBar.currentHeight || 0}}>
-      <Image source={require('../assets/images/diesel_logo_transparent.png')} style={{ width: 150, height: 150, borderRadius: 25, resizeMode: 'stretch' }} />
+      <Image source={require('../assets/images/diesel_logo_transparent_legend.png')} style={{ width: 150, height: 150, borderRadius: 0, resizeMode: 'stretch' }} />
 
       {/* Agregar el selector de tipo */}
       <View style={{ borderBottomWidth: 1, borderBottomColor: focusedInput === 'picker' ? 'blue' : 'gray', width: '80%', marginBottom: 10, marginTop: 10 }}>
@@ -75,7 +80,7 @@ const Login = ({ navigation }) => {
           onChangeText={(text) => setUsername(text)}
           onFocus={() => setFocusedInput('username')}
           onBlur={() => setFocusedInput(null)}
-          style={{ padding: 10, width: '80%' }}
+          style={{ padding: 10,width: '80%' }}
         />
       </View>
 
@@ -97,12 +102,12 @@ const Login = ({ navigation }) => {
       </TouchableOpacity>
 
       {/* Botón Iniciar Sesión */}
-      <TouchableOpacity onPress={handleLogin} style={{ backgroundColor: 'orange', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5 }}>
+      <TouchableOpacity onPress={handleLogin} style={{ backgroundColor: 'orange', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5 }}>
         <Text style={{ color: 'white' }}>Iniciar Sesión</Text>
       </TouchableOpacity>
 
       {/* Botón Continuar sin Iniciar Sesión */}
-      <TouchableOpacity onPress={handleContinueWithoutLogin} style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5 }}>
+      <TouchableOpacity onPress={handleContinueWithoutLogin} style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5 }}>
         <Text>Continuar sin Iniciar Sesión</Text>
       </TouchableOpacity>
 
@@ -118,10 +123,10 @@ const Login = ({ navigation }) => {
       <Modal isVisible={isExitModalVisible}>
         <View style={{ alignSelf: 'center', justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', borderRadius: 10, padding: 20, width: '80%' }}>
           <Text style={{ marginBottom: 10 }}>¿Seguro que desea salir de la aplicación?</Text>
-          <TouchableOpacity onPress={handleExitCancel} style={{ backgroundColor: 'orange', padding: 10, marginVertical: 10, width: '100%', alignItems: 'center', borderRadius: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5 }}>
+          <TouchableOpacity onPress={handleExitCancel} style={{ backgroundColor: 'orange', padding: 10, marginVertical: 10, width: '100%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5 }}>
             <Text style={{ color: 'white' }}>Cancelar</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleExitConfirm} style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '100%', alignItems: 'center', borderRadius: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5 }}>
+          <TouchableOpacity onPress={handleExitConfirm} style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '100%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5 }}>
             <Text>Aceptar</Text>
           </TouchableOpacity>
         </View>
