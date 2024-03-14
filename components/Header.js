@@ -4,7 +4,7 @@ import { View, Text, TouchableOpacity, Modal, Animated, Easing, TouchableWithout
 import Icon from 'react-native-vector-icons/Feather';
 import { useUserContext } from '../hooks/UserContext';
 
-const Header = ({nav, title, search}) => {
+const Header = ({nav, title, search, funcBack}) => {
   const { user, logout } = useUserContext();
   const [isMenuVisible, setMenuVisible] = useState(false);
 
@@ -52,14 +52,20 @@ const Header = ({nav, title, search}) => {
       <TouchableWithoutFeedback onPress={handleOutsidePress}>
         <View style={{ backgroundColor: '#001f36', padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
-            <TouchableOpacity onPress={handleMenuPress}>
-              <Icon name="menu" size={25} color="white" />
-            </TouchableOpacity>
+            {title !== "Domicilio de envío" ? (
+              <TouchableOpacity onPress={handleMenuPress}>
+                <Icon name="menu" size={25} color="white" />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={funcBack}>
+                <Icon name="arrow-left" size={25} color="white" />
+              </TouchableOpacity>
+            )}
             <Text style={{ color: 'white', fontSize:22, fontWeight:500 }}>{title}</Text>
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
             {search && <Icon name="search" size={25} color="white" />}
-            {user && title !== "Pedido Actual" && (
+            {user && title !== "Pedido Actual" && title !== "Domicilio de envío" && (
               <TouchableOpacity onPress={() => nav.navigate("MyOrder")} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
                 <Icon name="shopping-cart" size={22} color="white" />
               </TouchableOpacity>

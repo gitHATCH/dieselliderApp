@@ -38,8 +38,8 @@ const TurboParts = ({ navigation }) => {
       <Header nav={navigation} title={"Catálogo"}/>
       <SubHeader title={"Partes de Turbos"}/>
 
-      <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center'}}>
-        <View style={{ borderBottomWidth: 1, borderBottomColor: focusedInput === 'picker' ? 'blue' : 'gray', width: '80%', marginBottom: 10, marginTop: 10 }}>
+      <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', padding:20}}>
+        <View style={{ borderBottomWidth: 1, borderBottomColor: focusedInput === 'picker' ? 'blue' : 'gray', width: '100%', marginBottom: 0, marginTop: 0 }}>
             <Picker
               selectedValue={group}
               onValueChange={(itemValue) => setGroup(itemValue)}
@@ -53,44 +53,44 @@ const TurboParts = ({ navigation }) => {
             </Picker>
         </View>
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: focusedInput === 'code' ? 'blue' : 'gray', width: '80%' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: focusedInput === 'code' ? 'blue' : 'gray', width: '100%' }}>
           <TextInput
             placeholder="Código DL"
             value={code}
             onChangeText={(text) => setCode(text)}
             onFocus={() => setFocusedInput('code')}
             onBlur={() => setFocusedInput(null)}
-            style={{ padding: 10,width: '80%' }}
+            style={{ padding: 10,width: '100%' }}
           />
         </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: focusedInput === 'descr' ? 'blue' : 'gray', width: '80%' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: focusedInput === 'descr' ? 'blue' : 'gray', width: '100%' }}>
           <TextInput
             placeholder="Descripción DL"
             value={description}
             onChangeText={(text) => setDescription(text)}
             onFocus={() => setFocusedInput('descr')}
             onBlur={() => setFocusedInput(null)}
-            style={{ padding: 10,width: '80%' }}
+            style={{ padding: 10,width: '100%' }}
           />
         </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: focusedInput === 'part' ? 'blue' : 'gray', width: '80%' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: focusedInput === 'part' ? 'blue' : 'gray', width: '100%' }}>
           <TextInput
             placeholder="Número de parte original"
             value={part}
             onChangeText={(text) => setPart(text)}
             onFocus={() => setFocusedInput('part')}
             onBlur={() => setFocusedInput(null)}
-            style={{ padding: 10,width: '80%' }}
+            style={{ padding: 10,width: '100%' }}
           />
         </View>
         {/* Mostrar mensaje de error y línea si existe */}
         {errorText ? (
           <>
             <Text style={{ color: 'red', marginTop: 10 }}>{errorText}</Text>
-            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, width: '80%' }} />
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, width: '100%' }} />
           </>
         ) : null}
-        <TouchableOpacity style={{ backgroundColor: 'blue', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5 }} onPress={searchResult}>
+        <TouchableOpacity style={{ marginTop:20 ,backgroundColor: 'blue', padding: 10, marginVertical: 10, width: '100%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5 }} onPress={searchResult}>
           <Text style={{ color: 'white' }}>Buscar</Text>
         </TouchableOpacity>
       </View>

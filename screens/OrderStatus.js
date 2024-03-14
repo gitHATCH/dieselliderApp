@@ -56,8 +56,8 @@ const OrderStatus = ({ navigation }) => {
   return (
     <View style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 }}>
         <Header nav={navigation} title={"Estado de Pedidos"}/>
-        <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center'}}>
-          <View style={{ borderBottomWidth: 1, borderBottomColor: focusedInput === 'picker' ? 'blue' : 'gray', width: '80%', marginTop: 10 }}>
+        <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', padding:20}}>
+          <View style={{ borderBottomWidth: 1, borderBottomColor: focusedInput === 'picker' ? 'blue' : 'gray', width: '100%', marginTop: 0 }}>
               <Picker
                 selectedValue={type}
                 onValueChange={(itemValue) => setType(itemValue)}
@@ -73,7 +73,7 @@ const OrderStatus = ({ navigation }) => {
           {advanced ? (
             <View>
               
-              <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: focusedInput === 'fromDate' ? 'blue' : 'gray', width: '80%' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: focusedInput === 'fromDate' ? 'blue' : 'gray', width: '100%' }}>
                   <TextInput
                     placeholder="Fecha desde"
                     onPressIn={() => showDatePicker("fromDate")}
@@ -84,7 +84,7 @@ const OrderStatus = ({ navigation }) => {
                     style={{ padding: 10,width: '100%' }}
                   />
               </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: focusedInput === 'toDate' ? 'blue' : 'gray', width: '80%' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: focusedInput === 'toDate' ? 'blue' : 'gray', width: '100%' }}>
                 <TextInput
                   placeholder="Fecha hasta"
                   onPressIn={() => showDatePicker("toDate")}
@@ -108,7 +108,7 @@ const OrderStatus = ({ navigation }) => {
               </View>
 
               
-              <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: focusedInput === 'fromAmount' ? 'blue' : 'gray', width: '80%' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: focusedInput === 'fromAmount' ? 'blue' : 'gray', width: '100%' }}>
                 <TextInput
                   placeholder="Importe total desde"
                   value={fromAmount}
@@ -119,7 +119,7 @@ const OrderStatus = ({ navigation }) => {
                   style={{ padding: 10,width: '100%' }}
                 />
               </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: focusedInput === 'toAmount' ? 'blue' : 'gray', width: '80%', marginBottom:10 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: focusedInput === 'toAmount' ? 'blue' : 'gray', width: '100%', marginBottom:10 }}>
                 <TextInput
                   placeholder="Importe total hasta"
                   value={toAmount}
@@ -132,7 +132,7 @@ const OrderStatus = ({ navigation }) => {
               </View>
             </View>
           ) : (
-            <View style={{ borderBottomWidth: 1, borderBottomColor: focusedInput === 'picker2' ? 'blue' : 'gray', width: '80%', marginBottom: 10}}>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: focusedInput === 'picker2' ? 'blue' : 'gray', width: '100%', marginBottom: 10}}>
               <Picker
                 selectedValue={period}
                 onValueChange={(itemValue) => setPeriod(itemValue)}
@@ -149,10 +149,10 @@ const OrderStatus = ({ navigation }) => {
           
 
       
-        <TouchableOpacity style={{ backgroundColor: 'blue', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5 }} onPress={searchResult}>
+        <TouchableOpacity style={{ backgroundColor: 'blue', padding: 10, marginVertical: 10, width: '100%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5 }} onPress={searchResult}>
           <Text style={{ color: 'white' }}>Buscar</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setAdvanced(!advanced)} style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5 }}>
+        <TouchableOpacity onPress={() => setAdvanced(!advanced)} style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '100%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5 }}>
           <Text>Búsqueda {advanced ? "básica" : "avanzada"}</Text>
         </TouchableOpacity>
 

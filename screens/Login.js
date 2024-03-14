@@ -120,7 +120,7 @@ const Login = ({ navigation }) => {
       ) : null}
 
       {/* Modal de confirmación de salida */}
-      <Modal isVisible={isExitModalVisible}>
+      <Modal onBackdropPress={handleExitCancel} isVisible={isExitModalVisible}>
         <View style={{ alignSelf: 'center', justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', borderRadius: 10, padding: 20, width: '80%' }}>
           <Text style={{ marginBottom: 10 }}>¿Seguro que desea salir de la aplicación?</Text>
           <TouchableOpacity onPress={handleExitCancel} style={{ backgroundColor: 'orange', padding: 10, marginVertical: 10, width: '100%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5 }}>
