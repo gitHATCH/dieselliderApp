@@ -5,6 +5,8 @@ const UserContext = createContext();
 const UserProvider = ({ children }) => {
 
   const [user, setUser] = useState(null)
+  const [products, setProducts] = useState([])
+
 
   const login = async (username,password,idType) => {
     setUser("User")
@@ -14,10 +16,31 @@ const UserProvider = ({ children }) => {
     setUser(null)
   }
 
+  const addProduct = (product) => {
+    setProducts([...products, product])
+  }
+
+  const removeProduct = (product) => {
+    setProducts(products.filter(p => p.id !== product.id))
+  }
+
+  const isInProducts = (products) => {
+    return products.some(p => p.id === product.id)
+  }
+
+  const clearProducts = () => {
+    setProducts([])
+  }
+
   const contextValue = {
     login,
     logout,
-    user
+    user,
+    isInProducts,
+    addProduct,
+    removeProduct,
+    clearProducts,
+    products
   };
 
   return (

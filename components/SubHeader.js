@@ -18,6 +18,8 @@ const SubHeader = ({title, setActual, actual, notTitle}) => {
         </View>
         {title === "Turbos y Conjuntos" && (
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
+            <Icon name="tag" size={25} color="white" />
+            <Icon name="filter" size={25} color="white" />
             <Icon name="refresh" size={25} color="white" />
           </View>
         )}

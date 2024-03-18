@@ -1,6 +1,6 @@
 // HomeScreen.js
 import React, { useState } from 'react';
-import { View, Text, StatusBar, FlatList, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StatusBar, FlatList, TouchableOpacity, Image, Dimensions  } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Modal from 'react-native-modal';
@@ -8,38 +8,55 @@ import Carousel from 'react-native-snap-carousel';
 import Image1 from '../assets/images/turbo1.jpg';
 import Image2 from '../assets/images/turbo2.jpg';
 import Image3 from '../assets/images/turbo3.jpg';
-
 import Header from '../components/Header';
 import SubHeader from '../components/SubHeader';
+import { useUserContext } from '../hooks/UserContext';
+import ToastManager, { Toast } from 'toastify-react-native'
 
 //TODO: Mostrar los productos buscados, sino nada un cartel o la busqueda anterior
+//TODO: Reemplazar carrucel 
+//TODO: Ver filtro y Precios
+//TODO: Utilizar state search y pasarlo a header
+//TODO: Hacer lo de relaciones
 
 const HomeScreen = ({ navigation }) => {
+  const {  
+    isInProducts,
+    addProduct,
+    removeProduct,
+    clearProducts,
+  } = useUserContext();
   const [actualView, setActualView] = useState("Códigos DL")
   const [product, setProduct] = useState("")
   const [modalVisible, setModalVisible] = useState(false);
   const [detailVisible, setDetailVisible] = useState(false);
   const [focusedInput, setFocusedInput] = useState(null);
+  const [search, setSearch] = useState("");
 
-  const images = [Image1, Image2, Image3];
+ const images = [Image1, Image2, Image3];
+
+ 
   const [picker, setPicker] = useState("1 Unidad");
   
   const [products, setProducts] = useState([
-    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[1]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", grupo:"TURBOS NUEVOS"},
-    { state: "Disponible", name: "Turbo TB2535", code:"465445-0002", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", grupo:"TURBOS NUEVOS"},
-    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[2]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", grupo:"TURBOS NUEVOS"},
-    { state: "Inhabilitado", name: "Turbo TB2535", code:"465445-0003", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", grupo:"TURBOS NUEVOS"},
-    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[3]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", grupo:"TURBOS NUEVOS"},
-    { state: "Disponible", name: "Turbo TB2535", code:"465445-0004", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", grupo:"TURBOS NUEVOS"},
-    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[4]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", grupo:"TURBOS NUEVOS"},
-    { state: "Inhabilitado", name: "Turbo TB2535", code:"465445-0005", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", grupo:"TURBOS NUEVOS"},
-    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[5]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", grupo:"TURBOS NUEVOS"},
-    { state: "Disponible", name: "Turbo TB2535", code:"465445-0006", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", grupo:"TURBOS NUEVOS"},
-    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[6]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", grupo:"TURBOS NUEVOS"},
-    { state: "Disponible", name: "Turbo TB2535", code:"465445-0007", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", grupo:"TURBOS NUEVOS"},
-    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[7]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", grupo:"TURBOS NUEVOS"},
-    { state: "Inhabilitado", name: "Turbo TB2535", code:"465445-0008", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", grupo:"TURBOS NUEVOS"},
+    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[1]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
+    { state: "Disponible", name: "Turbo TB2535", code:"465445-0002", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
+    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[2]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
+    { state: "Inhabilitado", name: "Turbo TB2535", code:"465445-0003", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
+    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[3]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
+    { state: "Disponible", name: "Turbo TB2535", code:"465445-0004", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
+    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[4]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
+    { state: "Inhabilitado", name: "Turbo TB2535", code:"465445-0005", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
+    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[5]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
+    { state: "Disponible", name: "Turbo TB2535", code:"465445-0006", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
+    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[6]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
+    { state: "Disponible", name: "Turbo TB2535", code:"465445-0007", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
+    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[7]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
+    { state: "Inhabilitado", name: "Turbo TB2535", code:"465445-0008", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
   ])
+  const [visible, setIsVisible] = useState(false);
+  
+  const { width: screenWidth } = Dimensions.get('window');
 
   const handleActualView = (title) => {
     setActualView(title);
@@ -81,7 +98,9 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const addToOrder = () => {
-    console.log("Agregado al pedido");
+    addProduct(product);
+    setModalVisible(false);
+    Toast.success('Agregado correctamente!')
   }
 
   const renderItem = ({ item }) => {
@@ -117,19 +136,24 @@ const HomeScreen = ({ navigation }) => {
     <View style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 }}>
       <Header funcBack={handleDetailClose} nav={navigation} title={product && detailVisible ? "Producto" : "Catálogo"} search={!detailVisible && true}/>
       {!detailVisible && <SubHeader title={"Turbos y Conjuntos"} setActual={handleActualView} actual={actualView}/>}
+      <ToastManager width={300} />
       <View style={{ flex: 1, padding: 10 }}>
         {product && detailVisible ? (
           <View>
-            <View style={{alignItems:"center"}}>
-              {/* Imagen - Estado/Nombre-Marca - Codigo - PrecioNeto - hr - Unidades/Total - Agregar - Caracteristicas - Marca/Tipo de Producto - Seccion/Grupo */}
+          
+            <View>
               <Carousel
                 data={images}
                 renderItem={renderCarr}
-                sliderWidth={300}
+                sliderWidth={400}
                 itemWidth={200}
                 layout={"default"}
               />
             </View>
+
+
+
+              
               <Text numberOfLines={4} ellipsizeMode="tail" style={{width:"90%" }}>
                 {`${product.name}`}
               </Text>
@@ -162,9 +186,52 @@ const HomeScreen = ({ navigation }) => {
             <Text style={{fontWeight:500, fontSize:16}}>ARS {formatPrice(product.neto)}</Text>
           </View>
 
-          <View style={{}}>
-            <TouchableOpacity style={{ backgroundColor: 'orange', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5, marginTop:20 }}>
-              <Text style={{ color: 'white' }}>Iniciar Sesión</Text>
+          <View style={{alignItems:"center"}}>
+            <TouchableOpacity onPress={addToOrder} style={{ backgroundColor: 'orange', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5, marginTop:20 }}>
+              <Text style={{ color: 'white' }}>Agregar al pedido</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{marginTop:20,flexDirection:"row",justifyContent:"space-between", alignItems:"center"}}>
+            <Text style={{fontSize:20}}>Características</Text>
+            <Icon name="right" size={25} color="black" />
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap:20, marginTop:10 }}>
+            <View style={{ width: '50%' }}>
+              <Text style={{fontWeight:400, }}>Marca</Text>
+            </View>
+            <View style={{ width: '50%' }}>
+              <Text style={{fontWeight:400, }}>Tipo de produto</Text>
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap:20 }}>
+            <View style={{ width: '50%' }}>
+              <Text style={{fontWeight:500}}>{product.brand}</Text>
+            </View>
+            <View style={{ width: '50%' }}>
+              <Text  style={{fontWeight:500}}>{product.type}</Text>
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap:20, marginTop:10 }}>
+            <View style={{ width: '50%' }}>
+              <Text style={{fontWeight:400, }}>Sección</Text>
+            </View>
+            <View style={{ width: '50%' }}>
+              <Text style={{fontWeight:400, }}>Grupo</Text>
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap:20 }}>
+            <View style={{ width: '50%' }}>
+              <Text style={{fontWeight:500}}>{product.section}</Text>
+            </View>
+            <View style={{ width: '50%' }}>
+              <Text  style={{fontWeight:500}}>{product.group}</Text>
+            </View>
+          </View>
+          <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 20, marginBottom:0,width: '100%' }} />
+
+          <View style={{alignItems:"center", marginTop:10}}>
+            <TouchableOpacity style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5, marginTop:20 }}>
+              <Text style={{  }}>Relaciones</Text>
             </TouchableOpacity>
           </View>
 
