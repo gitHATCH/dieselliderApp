@@ -52,7 +52,7 @@ const Header = ({nav, title, search, funcBack}) => {
       <TouchableWithoutFeedback onPress={handleOutsidePress}>
         <View style={{ backgroundColor: '#001f36', padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
-            {title !== "Domicilio de envío" ? (
+            {title !== "Domicilio de envío" && title !== "Producto" ? (
               <TouchableOpacity onPress={handleMenuPress}>
                 <Icon name="menu" size={25} color="white" />
               </TouchableOpacity>
@@ -65,7 +65,7 @@ const Header = ({nav, title, search, funcBack}) => {
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
             {search && <Icon name="search" size={25} color="white" />}
-            {user && title !== "Pedido Actual" && title !== "Domicilio de envío" && (
+            {user && title !== "Pedido Actual" && title !== "Domicilio de envío" && title !== "Producto" && (
               <TouchableOpacity onPress={() => nav.navigate("MyOrder")} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
                 <Icon name="shopping-cart" size={22} color="white" />
               </TouchableOpacity>

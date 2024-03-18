@@ -97,12 +97,14 @@ const Login = ({ navigation }) => {
       </View>
 
       {/* Botón Olvidaste tu Contraseña */}
-      <TouchableOpacity onPress={() => navigation.navigate('ResetPassword')} style={{ alignSelf: 'flex-start', marginLeft: '10%', marginBottom: 10, marginTop: 5 }}>
-        <Text>¿Olvidaste tu contraseña?</Text>
-      </TouchableOpacity>
+      {/* 
+        <TouchableOpacity onPress={() => navigation.navigate('ResetPassword')} style={{ alignSelf: 'flex-start', marginLeft: '10%', marginBottom: 10, marginTop: 5 }}>
+          <Text>¿Olvidaste tu contraseña?</Text>
+        </TouchableOpacity>
+      */}
 
       {/* Botón Iniciar Sesión */}
-      <TouchableOpacity onPress={handleLogin} style={{ backgroundColor: 'orange', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5 }}>
+      <TouchableOpacity onPress={handleLogin} style={{ backgroundColor: 'orange', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5, marginTop:20 }}>
         <Text style={{ color: 'white' }}>Iniciar Sesión</Text>
       </TouchableOpacity>
 
