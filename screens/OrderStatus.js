@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, StatusBar, FlatList } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity, StatusBar, FlatList, ScrollView,useWindowDimensions, LogBox } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/AntDesign';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -14,9 +14,7 @@ const OrderStatus = ({ navigation }) => {
   const [toDate, setToDate] = useState('');
   const [fromAmount, setFromAmount] = useState('');
   const [toAmount, setToAmount] = useState('');
-  // TODO: Traer tipos
-  // TODO: Ningun tipo por defecto, mostrar placeholder
-  //TODO: Debe permitir acceder al detalle de cada producto de cada orden
+  //TODO: Hacer FlatList de Productos en un pedido y mostrar screen
   const [types, setTypes] = useState(['Pedidos en todos los estados', 'Pedidos para autorizar', 'Pedidos autorizados', 'Pedidos en proceso', 'Pedidos facturados', 'Pedidos cancelados']);
   const [periods, setPeriods] = useState(['Todo el periodo', 'Movimientos del día', 'Últimos 7 días', 'Últimos 15 días', 'Últimos 30 días', 'Últimos 60 días', 'Últimos 90 días']);
   const [focusedInput, setFocusedInput] = useState(null);
@@ -27,24 +25,30 @@ const OrderStatus = ({ navigation }) => {
   const [searching, setSearching] = useState(false);
   const [order, setOrder] = useState(null);
   const [detailVisible, setDetailVisible] = useState(false);
+  const windowHeight = useWindowDimensions().height;
 
   const [orders, setOrders] = useState([
-    { num: "123456", date: "2021-08-01", status: "cancelado", paymentDate: "2021-08-01", hour: "Por la tarde", address: "Sin datos", transport: "BUSPACK (C/ ENVIO A DOMICILIO)", paymentType: "DESTINO",  iva:533.23,
+    { num: "123456", currency: "ARS",date: "01/08/2021", status: "cancelado", paymentDate: "01/08/2021", hour: "Por la tarde", address: "Sin datos", transport: "BUSPACK (C/ ENVIO A DOMICILIO)", paymentType: "DESTINO",  iva:533.23, otherTaxes: 0.00,
       products: [{name: "Rueda turbina S300 Fundicion K418 (167479) (OFA)", brand: "OFF FACTORY", code:"16-81 K[1]", price: 2539.2, quantity:1}]
     },
-    { num: "123457", date: "2021-08-01", status: "cancelado", paymentDate: "2021-08-01", hour: "Por la tarde", address: "Sin datos", transport: "BUSPACK (C/ ENVIO A DOMICILIO)", paymentType: "DESTINO",  iva:533.23,
+    { num: "123457", currency: "ARS", date: "01/08/2021", status: "cancelado", paymentDate: "01/08/2021", hour: "Por la tarde", address: "Sin datos", transport: "BUSPACK (C/ ENVIO A DOMICILIO)", paymentType: "DESTINO",  iva:533.23, otherTaxes: 0.00,
       products: [{name: "Rueda turbina S300 Fundicion K418 (167479) (OFA)", brand: "OFF FACTORY", code:"16-81 K[1]", price: 2539.2, quantity:1}]
     },
-    { num: "123458", date: "2021-08-01", status: "cancelado", paymentDate: "2021-08-01", hour: "Por la tarde", address: "Sin datos", transport: "BUSPACK (C/ ENVIO A DOMICILIO)", paymentType: "DESTINO",  iva:533.23,
+    { num: "123458", currency: "USD", date: "01/08/2021", status: "cancelado", paymentDate: "01/08/2021", hour: "Por la tarde", address: "Sin datos", transport: "BUSPACK (C/ ENVIO A DOMICILIO)", paymentType: "DESTINO",  iva:533.23, otherTaxes: 0.00,
       products: [{name: "Rueda turbina S300 Fundicion K418 (167479) (OFA)", brand: "OFF FACTORY", code:"16-81 K[1]", price: 2539.2, quantity:1}]
     },
-    { num: "123459", date: "2021-08-01", status: "cancelado", paymentDate: "2021-08-01", hour: "Por la tarde", address: "Sin datos", transport: "BUSPACK (C/ ENVIO A DOMICILIO)", paymentType: "DESTINO",  iva:533.23,
+    { num: "123459", currency: "ARS", date: "01/08/2021", status: "cancelado", paymentDate: "01/08/2021", hour: "Por la tarde", address: "Sin datos", transport: "BUSPACK (C/ ENVIO A DOMICILIO)", paymentType: "DESTINO",  iva:533.23, otherTaxes: 0.00,
       products: [{name: "Rueda turbina S300 Fundicion K418 (167479) (OFA)", brand: "OFF FACTORY", code:"16-81 K[1]", price: 2539.2, quantity:1}]
     },
-    { num: "123460", date: "2021-08-01", status: "cancelado", paymentDate: "2021-08-01", hour: "Por la tarde", address: "Sin datos", transport: "BUSPACK (C/ ENVIO A DOMICILIO)", paymentType: "DESTINO",  iva:533.23,
+    { num: "123460", currency: "ARS", date: "01/08/2021", status: "cancelado", paymentDate: "01/08/2021", hour: "Por la tarde", address: "Sin datos", transport: "BUSPACK (C/ ENVIO A DOMICILIO)", paymentType: "DESTINO",  iva:533.23, otherTaxes: 0.00,
       products: [{name: "Rueda turbina S300 Fundicion K418 (167479) (OFA)", brand: "OFF FACTORY", code:"16-81 K[1]", price: 2539.2, quantity:1}]
     },
   ])
+
+  useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead.']);
+    setSearching(false)
+  }, [navigation])
 
   const formatPrice = (price) => {
     const priceString = price.toString();
@@ -138,8 +142,100 @@ const OrderStatus = ({ navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 }}>
-        <Header nav={navigation} title={"Estado de Pedidos"}/>
+    <ScrollView style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 , minHeight: Math.round(windowHeight)}}>
+        <Header funcBack={handleDetailClose}  nav={navigation} title={order && detailVisible ? "Pedido" : "Estado de Pedidos"}/>
+        {order && detailVisible ? (
+          <View style={{padding:10}}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap:20, marginTop:10 }}>
+              <View style={{ width: '50%' }}>
+                <Text style={{fontWeight:400, }}>Pedido N°</Text>
+              </View>
+              <View style={{ width: '50%' }}>
+                <Text style={{fontWeight:400, }}>Fecha</Text>
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap:20 }}>
+              <View style={{ width: '50%' }}>
+                <Text style={{fontWeight:500}}>{order.num}</Text>
+              </View>
+              <View style={{ width: '50%' }}>
+                <Text  style={{fontWeight:500}}>{order.date}</Text>
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap:20, marginTop:10 }}>
+              <View style={{ width: '50%' }}>
+                <Text style={{fontWeight:400, }}>Moneda</Text>
+              </View>
+              <View style={{ width: '50%' }}>
+                <Text style={{fontWeight:400, }}>Estado</Text>
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap:20 }}>
+              <View style={{ width: '50%' }}>
+                <Text style={{fontWeight:500}}>{order.currency}</Text>
+              </View>
+              <View style={{ width: '50%' }}>
+                <Text  style={{fontWeight:500}}>Pedido {order.status}</Text>
+              </View>
+            </View>
+            {/* FlatList Productos */}
+            <View style={{ backgroundColor: '#e0e0e0', padding: 10, marginTop: 20, width: '100%', borderRadius: 5 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <Text>Subtotal neto:</Text>
+                  <Text>ARS {formatPrice(order.products.reduce((accumulator, currentProduct) => {
+                return accumulator + currentProduct.price;
+            }, 0))}</Text>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
+                  <Text>IVA:</Text>
+                  <Text>ARS {formatPrice(order.iva.toFixed(2))}</Text>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
+                  <Text>Otros impuestos:</Text>
+                  <Text>ARS {formatPrice(order.otherTaxes.toFixed(2))}</Text>
+              </View>
+              <View style={{ borderBottomWidth: 2, borderBottomColor: 'gray', marginTop: 10, width: '100%' }} />
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
+                  <Text style={{fontWeight:800}}>Total del pedido:</Text>
+                  <Text style={{fontWeight:800}}>ARS {formatPrice(order.products.reduce((accumulator, currentProduct) => {
+                     return accumulator + currentProduct.price;
+                  }, 0) + order.iva + order.otherTaxes)}</Text>
+              </View>
+            </View>
+            <View style={{ marginTop:10 }}>
+                <Text style={{fontWeight:400, }}>Facturar el día</Text>
+            </View>
+            <View style={{}}>
+                <Text style={{fontWeight:500}}>{order.paymentDate}</Text>
+            </View>
+            <View style={{ marginTop:10 }}>
+                <Text style={{fontWeight:400, }}>Horario de envío</Text>
+            </View>
+            <View style={{}}>
+                <Text style={{fontWeight:500}}>{order.hour}</Text>
+            </View>
+            <View style={{ marginTop:10 }}>
+                <Text style={{fontWeight:400, }}>Domicilio de envío</Text>
+            </View>
+            <View style={{}}>
+                <Text style={{fontWeight:500}}>{order.address}</Text>
+            </View>
+            <View style={{ marginTop:10 }}>
+                <Text style={{fontWeight:400, }}>Transporte</Text>
+            </View>
+            <View style={{}}>
+                <Text style={{fontWeight:500}}>{order.transport}</Text>
+            </View>
+            <View style={{ marginTop:10 }}>
+                <Text style={{fontWeight:400, }}>Pago de transporte</Text>
+            </View>
+            <View style={{}}>
+                <Text style={{fontWeight:500}}>{order.paymentType}</Text>
+            </View>
+
+
+          </View>
+        ) : (
         <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', padding:20}}>
           <View style={{ borderBottomWidth: 1, borderBottomColor: focusedInput === 'picker' ? 'blue' : 'gray', width: '100%', marginTop: 0 }}>
               <Picker
@@ -240,12 +336,13 @@ const OrderStatus = ({ navigation }) => {
           <Text>Búsqueda {advanced ? "básica" : "avanzada"}</Text>
         </TouchableOpacity>
         {searching && (
-            <View style={{marginTop:20}}>
+            <View style={{marginTop:20, marginBottom:20}}>
               <FlatList
                 data={orders}
                 renderItem={renderItem}
                 keyExtractor={(item, index) => index.toString()}
                 ItemSeparatorComponent={renderSeparator}
+                 
               />
               <Modal onBackdropPress={handleModalClose} isVisible={modalVisible} animationIn="slideInUp" animationOut="slideOutDown">
                 <View style={{ flex: 1, justifyContent: 'flex-end'}}>
@@ -267,7 +364,9 @@ const OrderStatus = ({ navigation }) => {
             
         )}
       </View>
-    </View>
+
+        )}
+    </ScrollView>
   )
 }
 

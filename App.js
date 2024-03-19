@@ -16,13 +16,22 @@ import UserData from './screens/UserData';
 import MyOrder from './screens/MyOrder';
 
 const Stack = createNativeStackNavigator();
+//TODO: Arreglar lo de safe area cuando se expande el teclado el header se va para arriba
+//TODO: Agregar FlatList de productos en cada pedido
+//TODO: Agregar Ventana de Características en un producto y de notas
+//TODO: Agregar Despiece de productos
+//TODO: Agregar lo de relaciones
+//TODO: Agregar lo de pedidos
+//TODO: Preguntar por lo de la camara en CC Informar un pago y que hay en siguiente, preguntar lo de desacrgar comprobante, preguntar lo de despiece
+//TODO: Averiguar para descargar un xml y guardarlo localmente y luego acceder a este
+
 
 const App = () => {
   return (
     <CatalogProvider>
       <UserProvider>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="CatalogLoader" screenOptions={{ headerShown: false }}>
+            <Stack.Navigator initialRouteName="CatalogLoader" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="CatalogLoader" component={CatalogLoader} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
@@ -32,7 +41,7 @@ const App = () => {
             <Stack.Screen name="AccountCondition" component={AccountCondition} />
             <Stack.Screen name="UserData" component={UserData} />
             <Stack.Screen name="MyOrder" component={MyOrder} />
-            {/* Agrega más pantallas según tus necesidades */}
+         
           </Stack.Navigator>
         </NavigationContainer>
       </UserProvider>

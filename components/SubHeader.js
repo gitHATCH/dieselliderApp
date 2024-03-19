@@ -4,7 +4,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
-const SubHeader = ({title, setActual, actual, notTitle}) => {
+const SubHeader = ({title, setActual, actual, notTitle, searching}) => {
 
   const handleAddPress = (content) => {
     setActual(content)
@@ -18,8 +18,14 @@ const SubHeader = ({title, setActual, actual, notTitle}) => {
         </View>
         {title === "Turbos y Conjuntos" && (
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
-            <Icon name="tag" size={25} color="white" />
-            <Icon name="filter" size={25} color="white" />
+            {searching && (
+              <Icon name="tag" size={25} color="white" />
+            )}
+            {searching && (
+              <Icon name="filter" size={25} color="white" />
+            )}
+            
+            
             <Icon name="refresh" size={25} color="white" />
           </View>
         )}

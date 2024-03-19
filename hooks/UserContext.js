@@ -7,7 +7,6 @@ const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [products, setProducts] = useState([])
 
-
   const login = async (username,password,idType) => {
     setUser("User")
   };

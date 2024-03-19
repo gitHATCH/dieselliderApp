@@ -1,17 +1,17 @@
 // Header.js
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput,TouchableOpacity, Modal, Animated, Easing, TouchableWithoutFeedback, Dimensions, Image } from 'react-native';
+import { View, Text, TextInput,TouchableOpacity, Modal, Animated, Easing, TouchableWithoutFeedback, Dimensions, Image, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useUserContext } from '../hooks/UserContext';
 
-const Header = ({nav, title, search, funcBack}) => {
+//TODO: Se puede crear funcion para redirect en donde compruebe si se pasa como prop la funcion resetSearching para eliminar la flatList de la screen que se esta dejando
+
+const Header = ({nav, title, search, funcBack, searchValue, searching, changeSearchValue,changeSearching}) => {
   const { user, logout } = useUserContext();
   const [isMenuVisible, setMenuVisible] = useState(false);
-  const [searching, setSearching] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
+  //const [searching, setSearching] = useState(false);
+  //const [searchValue, setSearchValue] = useState("");
   const { width: screenWidth } = Dimensions.get('window');
-
-
 
   const logoutSesion = () => {
     logout();
@@ -19,8 +19,8 @@ const Header = ({nav, title, search, funcBack}) => {
   }
 
   const handleSearching = () => {
-    setSearchValue("")
-    setSearching(!searching);
+    changeSearchValue("")
+    changeSearching(!searching);
   }
 
   const handleMenuPress = () => {
@@ -63,7 +63,7 @@ const Header = ({nav, title, search, funcBack}) => {
         <View style={{width:screenWidth*0.95,flexDirection:"row", alignItems:"center", justifyContent:"space-between", gap: 20}}>
 
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
-            {title !== "Domicilio de envío" && title !== "Producto" ? (
+            {title !== "Domicilio de envío" && title !== "Producto"  && title !== "Pedido" && title !== "Comprobante" ? (
               <TouchableOpacity onPress={handleMenuPress}>
                 <Icon name="menu" size={25} color="white" />
               </TouchableOpacity>
@@ -81,7 +81,7 @@ const Header = ({nav, title, search, funcBack}) => {
               </TouchableOpacity>
               )}
 
-            {user && title !== "Pedido Actual" && title !== "Domicilio de envío" && title !== "Producto" && (
+            {user && title !== "Pedido Actual" && title !== "Domicilio de envío" && title !== "Producto" && title !== "Pedido" && title !== "Comprobante" && (
               <TouchableOpacity onPress={() => nav.navigate("MyOrder")} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
                 <Icon name="shopping-cart" size={22} color="white" />
               </TouchableOpacity>
@@ -95,9 +95,9 @@ const Header = ({nav, title, search, funcBack}) => {
             <TouchableOpacity onPress={handleSearching} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
               <Icon name="arrow-left" size={25} color="white" />
             </TouchableOpacity>
-            <View style={{flexDirection:"row", alignItems:"center", justifyContent:"space-between",backgroundColor: '#100f60', borderRadius:10, paddingHorizontal:10}}>
+            <View style={{flexDirection:"row", alignItems:"center", justifyContent:"space-between",backgroundColor: '#002b4c', borderRadius:10, paddingHorizontal:10}}>
               {searchValue !== "" && (
-                  <TouchableOpacity onPress={() => setSearchValue("")} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
+                  <TouchableOpacity onPress={() => changeSearchValue("")} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
                     <Icon name="search" size={25} color="white" />
                   </TouchableOpacity>
               )}
@@ -105,13 +105,16 @@ const Header = ({nav, title, search, funcBack}) => {
                 placeholder="Buscar..."
                 placeholderTextColor="white"
                 value={searchValue}
-                onChangeText={(text) => setSearchValue(text)}
+                onChangeText={(text) => changeSearchValue(text)}
                 style={{ padding: 4,paddingHorizontal:20,width:"78%", color:"white", fontSize:16, alignItems:"center"}}
               />
-              {searchValue !== "" && (
-                  <TouchableOpacity onPress={() => setSearchValue("")} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
+              <View></View>
+              {searchValue !== "" ? (
+                  <TouchableOpacity onPress={() => changeSearchValue("")} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
                     <Icon name="x" size={25} color="white" />
                   </TouchableOpacity>
+              ) : (
+                <View style={{width:"13%"}}></View>
               )}
               
             </View>
