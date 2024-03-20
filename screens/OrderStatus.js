@@ -5,11 +5,20 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Modal from 'react-native-modal';
 import Header from '../components/Header';
+import ToastManager, { Toast } from 'toastify-react-native'
+import Carousel from '../components/Carousel';
+import { useUserContext } from '../hooks/UserContext';
 
 const OrderStatus = ({ navigation }) => {
   const [advanced, setAdvanced] = useState(false);
   const [type, setType] = useState('Pedidos en todos los estados');
   const [period, setPeriod] = useState('Todo el periodo');
+  const {  
+    isInProducts,
+    addProduct,
+    removeProduct,
+    clearProducts,
+  } = useUserContext();
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [fromAmount, setFromAmount] = useState('');
@@ -20,28 +29,49 @@ const OrderStatus = ({ navigation }) => {
   const [focusedInput, setFocusedInput] = useState(null);
   const [actualDate, setActualDate] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [picker, setPicker] = useState("1 Unidad");
+  const [modalProdVisible, setModalProdVisible] = useState(false);
+  const [productVisible, setProductVisible] = useState(false);
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [searching, setSearching] = useState(false);
   const [order, setOrder] = useState(null);
+  const [product, setProduct] = useState(null);
   const [detailVisible, setDetailVisible] = useState(false);
+  const [featuresVisible, setFeaturesVisible] = useState(false);
+  const [notesVisible, setNotesVisible] = useState(false);
   const windowHeight = useWindowDimensions().height;
 
   const [orders, setOrders] = useState([
-    { num: "123456", currency: "ARS",date: "01/08/2021", status: "cancelado", paymentDate: "01/08/2021", hour: "Por la tarde", address: "Sin datos", transport: "BUSPACK (C/ ENVIO A DOMICILIO)", paymentType: "DESTINO",  iva:533.23, otherTaxes: 0.00,
-      products: [{name: "Rueda turbina S300 Fundicion K418 (167479) (OFA)", brand: "OFF FACTORY", code:"16-81 K[1]", price: 2539.2, quantity:1}]
+    { num: "123456",currency: "ARS",date: "01/08/2021", status: "cancelado", paymentDate: "01/08/2021", hour: "Por la tarde", address: "Sin datos", transport: "BUSPACK (C/ ENVIO A DOMICILIO)", paymentType: "DESTINO",  iva:533.23, otherTaxes: 0.00,
+      products: [
+        { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[1]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger", quantity: 1},
+        { state: "Disponible", name: "Turbo TB2535", code:"465445-0002", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"Inhabilitado",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger", quantity: 1},
+        { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[2]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger", quantity: 1},
+        { state: "No Disponible", name: "Turbo TB2535", code:"465445-0003", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"Inhabilitado",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger", quantity: 3},
+        { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[3]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger", quantity: 1},
+        { state: "Disponible", name: "Turbo TB2535", code:"465445-0004", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"Inhabilitado",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger", quantity: 1},
+        { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[4]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger", quantity: 1},
+        { state: "No Disponible", name: "Turbo TB2535", code:"465445-0005", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"Inhabilitado",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger", quantity: 1},
+        { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[5]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger", quantity: 1},
+        { state: "Disponible", name: "Turbo TB2535", code:"465445-0006", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"Inhabilitado",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger", quantity: 1},
+        { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[6]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger", quantity: 1},
+        { state: "Disponible", name: "Turbo TB2535", code:"465445-0007", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"Inhabilitado",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger", quantity: 2},
+        { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[7]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger", quantity: 1},
+        { state: "No Disponible", name: "Turbo TB2535", code:"465445-0008", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"Inhabilitado",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger", quantity: 1},
+      ]
     },
     { num: "123457", currency: "ARS", date: "01/08/2021", status: "cancelado", paymentDate: "01/08/2021", hour: "Por la tarde", address: "Sin datos", transport: "BUSPACK (C/ ENVIO A DOMICILIO)", paymentType: "DESTINO",  iva:533.23, otherTaxes: 0.00,
-      products: [{name: "Rueda turbina S300 Fundicion K418 (167479) (OFA)", brand: "OFF FACTORY", code:"16-81 K[1]", price: 2539.2, quantity:1}]
+      products: [{ state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[1]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger", quantity:5}]
     },
     { num: "123458", currency: "USD", date: "01/08/2021", status: "cancelado", paymentDate: "01/08/2021", hour: "Por la tarde", address: "Sin datos", transport: "BUSPACK (C/ ENVIO A DOMICILIO)", paymentType: "DESTINO",  iva:533.23, otherTaxes: 0.00,
-      products: [{name: "Rueda turbina S300 Fundicion K418 (167479) (OFA)", brand: "OFF FACTORY", code:"16-81 K[1]", price: 2539.2, quantity:1}]
+      products: [{ state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[1]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger", quantity:1}]
     },
     { num: "123459", currency: "ARS", date: "01/08/2021", status: "cancelado", paymentDate: "01/08/2021", hour: "Por la tarde", address: "Sin datos", transport: "BUSPACK (C/ ENVIO A DOMICILIO)", paymentType: "DESTINO",  iva:533.23, otherTaxes: 0.00,
-      products: [{name: "Rueda turbina S300 Fundicion K418 (167479) (OFA)", brand: "OFF FACTORY", code:"16-81 K[1]", price: 2539.2, quantity:1}]
+      products: [{ state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[1]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger", quantity:1}]
     },
     { num: "123460", currency: "ARS", date: "01/08/2021", status: "cancelado", paymentDate: "01/08/2021", hour: "Por la tarde", address: "Sin datos", transport: "BUSPACK (C/ ENVIO A DOMICILIO)", paymentType: "DESTINO",  iva:533.23, otherTaxes: 0.00,
-      products: [{name: "Rueda turbina S300 Fundicion K418 (167479) (OFA)", brand: "OFF FACTORY", code:"16-81 K[1]", price: 2539.2, quantity:1}]
+      products: [{ state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[1]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger", quantity:1}]
     },
   ])
 
@@ -65,6 +95,28 @@ const OrderStatus = ({ navigation }) => {
     const formattedDate = `${day}/${month}/${year}`;
     return formattedDate;
   };
+
+  const addToOrder = () => {
+    addProduct(product);
+    setModalVisible(false);
+    Toast.success('Agregado correctamente!')
+  }
+
+  const handleFeaturesClose = () => {
+    setFeaturesVisible(false);
+  }
+
+  const handleFeaturesOpen = () => {
+    setFeaturesVisible(true);
+  }
+
+  const handleNotesClose = () => {
+    setNotesVisible(false);
+  }
+
+  const handleNotesOpen = () => {
+    setNotesVisible(true);
+  }
   
   const showDatePicker = (picker) => {
     setDatePickerVisibility(true);
@@ -87,6 +139,29 @@ const OrderStatus = ({ navigation }) => {
 
   const searchResult = () => {
     setSearching(true);
+  }
+
+  const handleModalProdOpen = (item) => {
+    setProduct(item);
+    setModalVisible(true);
+    setModalProdVisible(true);
+  }
+
+
+  const handleModalProdClose = () => {
+    setProduct("")
+    setModalVisible(false);
+    setModalProdVisible(false);
+  }
+
+  const handleProductVisibleOpen = () => {
+    setProductVisible(true);
+    setModalVisible(false);
+    setModalProdVisible(false);
+  }
+
+  const handleProductVisibleClose = () => {
+    setProductVisible(false);
   }
 
   const handleModalOpen = (item) => {
@@ -121,11 +196,15 @@ const OrderStatus = ({ navigation }) => {
               {`Fecha ${item.date}`}
             </Text>
           </View>
-          <Text style={{fontWeight:400, fontSize:12}}>{`${item.products.length} ${item.products.length > 1 ? "Artículos" : "Artículo"}. Pedido ${item.status}`}</Text>
+          <Text style={{fontWeight:400, fontSize:12}}>{`${item.products.reduce((accumulator, currentProduct) => {
+                return accumulator + currentProduct.quantity;
+            }, 0)} ${item.products.reduce((accumulator, currentProduct) => {
+                return accumulator + currentProduct.quantity;
+            }, 0) > 1 ? "Artículos" : "Artículo"}. Pedido ${item.status}`}</Text>
           <View style={{flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
             <Text style={{fontWeight:400, fontSize:12}}>{`Importe total`}</Text>
             <Text style={{fontWeight:400, fontSize:12}}>{`ARS ${formatPrice(item.products.reduce((accumulator, currentProduct) => {
-                return accumulator + currentProduct.price;
+                return accumulator + currentProduct.neto;
             }, 0))}`}</Text>
  
           </View>
@@ -137,14 +216,182 @@ const OrderStatus = ({ navigation }) => {
     );
   };
 
+  const renderItemProduct = ({ item }) => {
+    return (
+      <TouchableOpacity onPress={() => handleModalProdOpen(item)} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <View style={{flexDirection: "column", width:"90%"}}>
+            <Text numberOfLines={4} ellipsizeMode="tail" style={{width:"90%" }}>
+              {`${item.name} - ${item.brand}`}
+            </Text>
+
+          <View style={{flexDirection:"row", alignItems:"center", gap:10}}>
+            <Text style={{fontWeight:400, fontSize:12}}>{item.code}</Text>
+            
+          </View>
+
+          <View style={{justifyContent:"space-between", flexDirection: "row"}}>
+            <Text style={{fontWeight:500, fontSize:12}}>{item.quantity} {item.quantity > 1 ? "Unidades" : "Unidad"}</Text>
+            <Text style={{fontWeight:500, fontSize:12}}>ARS {formatPrice(item.neto)}</Text>
+          </View>
+        </View>
+        <Icon name="right" size={25} color="black" />
+      </TouchableOpacity>
+    );
+  };
+
   const renderSeparator = () => {
     return <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginVertical: 10 }} />;
   };
 
   return (
-    <ScrollView style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 , minHeight: Math.round(windowHeight)}}>
-        <Header funcBack={handleDetailClose}  nav={navigation} title={order && detailVisible ? "Pedido" : "Estado de Pedidos"}/>
-        {order && detailVisible ? (
+    <View style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 , minHeight: Math.round(windowHeight)}}>
+        <Header funcBack={featuresVisible ? handleFeaturesClose : notesVisible ? handleNotesClose : productVisible ? handleProductVisibleClose : handleDetailClose}  nav={navigation} title={notesVisible ? "Notas" : featuresVisible ? "Características" : productVisible ? "Producto" : detailVisible ? "Pedido" : "Estado de Pedidos"}/>
+        <ToastManager width={300} />
+
+        <ScrollView>
+        {notesVisible ? (
+          <ScrollView style={{padding:10}}>
+            <Text numberOfLines={20} ellipsizeMode="tail" style={{fontWeight:500}}>{product.notes}</Text>
+          </ScrollView>
+        ) :
+        featuresVisible ? (
+          <ScrollView style={{padding:10}}>
+            <Text style={{fontWeight:400, }}>Código DL</Text>
+            <Text style={{fontWeight:500}}>{product.code}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text  style={{fontWeight:400, }}>Descripción</Text>
+            <Text numberOfLines={4} ellipsizeMode="tail" style={{fontWeight:500}}>{product.name}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>Marca</Text>
+            <Text style={{fontWeight:500}}>{product.brand}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>Tipo de producto</Text>
+            <Text style={{fontWeight:500}}>{product.type}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>Sección</Text>
+            <Text style={{fontWeight:500}}>{product.section}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>Grupo</Text>
+            <Text style={{fontWeight:500}}>{product.group}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>Subgrupo</Text>
+            <Text style={{fontWeight:500}}>{product.subgroup}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>N° de parte</Text>
+            <Text style={{fontWeight:500}}>{product.partNum}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>Unidad de medida</Text>
+            <Text style={{fontWeight:500}}>{product.unity}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>Precio de lista</Text>
+            <Text style={{fontWeight:500}}>ARS {formatPrice(product.listPrice.toFixed(2))}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>Descuento</Text>
+            <Text style={{fontWeight:500}}>{product.disc}%</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>Pecio neto</Text>
+            <Text style={{fontWeight:500}}>ARS {formatPrice(product.neto.toFixed(2))}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>Stock</Text>
+            <Text style={{width:"20%", textAlign:"center",fontWeight:500,backgroundColor:product.stock === "alto" ? "green" : "red", padding: 4, borderRadius: 10, fontSize:12, color:"white"}}>Stock {product.stock}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+          </ScrollView>
+        ) : productVisible ? (
+          <ScrollView>
+            <Carousel/>
+            <View style={{padding:10}}>
+              
+            
+              <Text numberOfLines={4} ellipsizeMode="tail" style={{width:"90%" }}>
+                {`${product.name}`}
+              </Text>
+              <Text style={{fontWeight:700}}>{product.brand}</Text>
+              <View style={{flexDirection:"row", alignItems:"center", gap:10}}>
+                <Text style={{fontWeight:400, fontSize:12}}>{product.code}</Text>
+                {product.state === "Disponible" ?
+                <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: 'green', marginRight: 10 }} />
+                : <Text style={{backgroundColor:"red", padding: 4, borderRadius: 10, fontSize:12, color:"white"}}>Inhabilitado</Text> }
+              </View>
+
+              <View style={{justifyContent:"space-between", flexDirection: "row"}}>
+                <Text style={{fontWeight:500, fontSize:12}}>Precio neto</Text>
+                <Text style={{fontWeight:500, fontSize:12}}>ARS {formatPrice(product.neto)}</Text>
+              </View>
+              <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 20, marginBottom:10,width: '100%' }} />
+              <View style={{marginTop:0, justifyContent:"space-between", flexDirection:"row", alignItems:"center"}}>
+                <View style={{ borderBottomWidth: 1, borderBottomColor: focusedInput === 'picker' ? 'blue' : 'gray', width: '50%', marginTop: 0 }}>
+                  <Picker
+                    selectedValue={picker}
+                    onValueChange={(itemValue) => setPicker(itemValue)}
+                    style={{ height: 50, width: '100%', padding: 10 }}
+                    onFocus={() => setFocusedInput('picker')}
+                    onBlur={() => setFocusedInput(null)}
+                    >
+                      <Picker.Item label={"1 Unidad"} value={"1 Unidad"} key={1} />
+                  </Picker>
+                </View>
+                <Text style={{fontWeight:500, fontSize:16}}>ARS {formatPrice(product.neto)}</Text>
+              </View>
+
+              <View style={{alignItems:"center"}}>
+                <TouchableOpacity onPress={addToOrder} style={{ backgroundColor: 'orange', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5, marginTop:20 }}>
+                  <Text style={{ color: 'white' }}>Agregar al pedido</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:0,width: '100%' }} />
+
+              <TouchableOpacity onPress={handleFeaturesOpen} style={{ marginTop:10,flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Text style={{fontSize:20}}>Características</Text>
+                  <Icon name="right" size={25} color="black" />
+              </TouchableOpacity>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap:20, marginTop:10 }}>
+                <View style={{ width: '50%' }}>
+                  <Text style={{fontWeight:400, }}>Marca</Text>
+                </View>
+                <View style={{ width: '50%' }}>
+                  <Text style={{fontWeight:400, }}>Tipo de produto</Text>
+                </View>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap:20 }}>
+                <View style={{ width: '50%' }}>
+                  <Text style={{fontWeight:500}}>{product.brand}</Text>
+                </View>
+                <View style={{ width: '50%' }}>
+                  <Text  style={{fontWeight:500}}>{product.type}</Text>
+                </View>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap:20, marginTop:10 }}>
+                <View style={{ width: '50%' }}>
+                  <Text style={{fontWeight:400, }}>Sección</Text>
+                </View>
+                <View style={{ width: '50%' }}>
+                  <Text style={{fontWeight:400, }}>Grupo</Text>
+                </View>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap:20 }}>
+                <View style={{ width: '50%' }}>
+                  <Text style={{fontWeight:500}}>{product.section}</Text>
+                </View>
+                <View style={{ width: '50%' }}>
+                  <Text  style={{fontWeight:500}}>{product.group}</Text>
+                </View>
+              </View>
+              <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:0,width: '100%' }} />
+              <TouchableOpacity onPress={handleNotesOpen} style={{ marginTop:10,flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Text style={{fontSize:20}}>Notas</Text>
+                  <Icon name="right" size={25} color="black" />
+              </TouchableOpacity>
+              <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:0,width: '100%' }} />
+
+              <View style={{alignItems:"center", marginTop:0}}>
+                <TouchableOpacity style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5, marginTop:20 }}>
+                  <Text style={{  }}>Relaciones</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+          </ScrollView>
+        ) : detailVisible ? (
           <View style={{padding:10}}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap:20, marginTop:10 }}>
               <View style={{ width: '50%' }}>
@@ -179,11 +426,19 @@ const OrderStatus = ({ navigation }) => {
               </View>
             </View>
             {/* FlatList Productos */}
+            <View style={{ borderBottomWidth: 1,marginTop:20,marginBottom:20 ,borderBottomColor: 'lightgray', marginVertical: 10 }} />
+            <FlatList
+              data={order.products}
+              renderItem={renderItemProduct}
+              keyExtractor={(item, index) => index.toString()}
+              ItemSeparatorComponent={renderSeparator}
+            />
+
             <View style={{ backgroundColor: '#e0e0e0', padding: 10, marginTop: 20, width: '100%', borderRadius: 5 }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Text>Subtotal neto:</Text>
                   <Text>ARS {formatPrice(order.products.reduce((accumulator, currentProduct) => {
-                return accumulator + currentProduct.price;
+                return accumulator + currentProduct.neto;
             }, 0))}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
@@ -198,11 +453,11 @@ const OrderStatus = ({ navigation }) => {
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
                   <Text style={{fontWeight:800}}>Total del pedido:</Text>
                   <Text style={{fontWeight:800}}>ARS {formatPrice(order.products.reduce((accumulator, currentProduct) => {
-                     return accumulator + currentProduct.price;
+                     return accumulator + currentProduct.neto;
                   }, 0) + order.iva + order.otherTaxes)}</Text>
               </View>
             </View>
-            <View style={{ marginTop:10 }}>
+            <View style={{ marginTop:20 }}>
                 <Text style={{fontWeight:400, }}>Facturar el día</Text>
             </View>
             <View style={{}}>
@@ -344,15 +599,22 @@ const OrderStatus = ({ navigation }) => {
                 ItemSeparatorComponent={renderSeparator}
                  
               />
-              <Modal onBackdropPress={handleModalClose} isVisible={modalVisible} animationIn="slideInUp" animationOut="slideOutDown">
+              
+            </View>
+            
+        )}
+      </View>
+
+        )}
+        <Modal onBackdropPress={modalProdVisible ? handleModalProdClose : handleModalClose} isVisible={modalVisible} animationIn="slideInUp" animationOut="slideOutDown">
                 <View style={{ flex: 1, justifyContent: 'flex-end'}}>
                   <View style={{ backgroundColor: 'white', padding: 20,borderRadius:10 }}>
                     <View style={{ }}>
-                      <TouchableOpacity onPress={handleDetailOpen} style={{width:"100%",alignItems:"center", flexDirection:"row", gap:20}} >
+                      <TouchableOpacity onPress={modalProdVisible ? handleProductVisibleOpen : handleDetailOpen} style={{width:"100%",alignItems:"center", flexDirection:"row", gap:20}} >
                         <Icon name="filetext1" size={22} color="black" />
                         <Text style={{fontSize:18, fontWeight:400}}>Detalles</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity style={{width:"100%",alignItems:"center", flexDirection:"row", gap:20, marginTop:10}} onPress={handleModalClose}>
+                      <TouchableOpacity style={{width:"100%",alignItems:"center", flexDirection:"row", gap:20, marginTop:10}} onPress={modalProdVisible ? handleModalProdClose : handleModalClose}>
                         <Icon name="close" size={22} color="black" />
                         <Text style={{fontSize:18, fontWeight:400}}>Cancelar</Text>
                       </TouchableOpacity>
@@ -360,13 +622,8 @@ const OrderStatus = ({ navigation }) => {
                   </View>
                 </View>
               </Modal>
-            </View>
-            
-        )}
-      </View>
-
-        )}
-    </ScrollView>
+        </ScrollView>
+    </View>
   )
 }
 

@@ -16,9 +16,7 @@ import UserData from './screens/UserData';
 import MyOrder from './screens/MyOrder';
 
 const Stack = createNativeStackNavigator();
-//TODO: Arreglar lo de safe area cuando se expande el teclado el header se va para arriba
 //TODO: Agregar FlatList de productos en cada pedido
-//TODO: Agregar Ventana de Características en un producto y de notas
 //TODO: Agregar Despiece de productos
 //TODO: Agregar lo de relaciones
 //TODO: Agregar lo de pedidos

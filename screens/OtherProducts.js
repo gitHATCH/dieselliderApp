@@ -27,21 +27,24 @@ const OtherProducts = ({ navigation }) => {
   const [detailVisible, setDetailVisible] = useState(false);
   const [picker, setPicker] = useState("1 Unidad");
 
+  const [featuresVisible, setFeaturesVisible] = useState(false);
+  const [notesVisible, setNotesVisible] = useState(false);
+
   const [products, setProducts] = useState([
-    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[1]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
-    { state: "Disponible", name: "Turbo TB2535", code:"465445-0002", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
-    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[2]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
-    { state: "Inhabilitado", name: "Turbo TB2535", code:"465445-0003", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
-    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[3]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
-    { state: "Disponible", name: "Turbo TB2535", code:"465445-0004", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
-    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[4]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
-    { state: "Inhabilitado", name: "Turbo TB2535", code:"465445-0005", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
-    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[5]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
-    { state: "Disponible", name: "Turbo TB2535", code:"465445-0006", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
-    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[6]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
-    { state: "Disponible", name: "Turbo TB2535", code:"465445-0007", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
-    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[7]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
-    { state: "Inhabilitado", name: "Turbo TB2535", code:"465445-0008", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS"},
+    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[1]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger"},
+    { state: "Disponible", name: "Turbo TB2535", code:"465445-0002", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"Inhabilitado",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger"},
+    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[2]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger"},
+    { state: "No Disponible", name: "Turbo TB2535", code:"465445-0003", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"Inhabilitado",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger"},
+    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[3]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger"},
+    { state: "Disponible", name: "Turbo TB2535", code:"465445-0004", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"Inhabilitado",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger"},
+    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[4]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger"},
+    { state: "No Disponible", name: "Turbo TB2535", code:"465445-0005", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"Inhabilitado",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger"},
+    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[5]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger"},
+    { state: "Disponible", name: "Turbo TB2535", code:"465445-0006", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"Inhabilitado",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger"},
+    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[6]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger"},
+    { state: "Disponible", name: "Turbo TB2535", code:"465445-0007", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"Inhabilitado",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger"},
+    { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[7]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger"},
+    { state: "No Disponible", name: "Turbo TB2535", code:"465445-0008", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"Inhabilitado",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger"},
   ])
 
   useEffect(() => {
@@ -58,6 +61,22 @@ const OtherProducts = ({ navigation }) => {
     const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     return `${formattedIntegerPart},${decimalPart}`;
   };
+
+  const handleFeaturesClose = () => {
+    setFeaturesVisible(false);
+  }
+
+  const handleFeaturesOpen = () => {
+    setFeaturesVisible(true);
+  }
+
+  const handleNotesClose = () => {
+    setNotesVisible(false);
+  }
+
+  const handleNotesOpen = () => {
+    setNotesVisible(true);
+  }
 
   const handleDetailOpen = () => {
     setModalVisible(false);
@@ -130,11 +149,58 @@ const OtherProducts = ({ navigation }) => {
   }
 
   return (
-    <ScrollView style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 }}>
-        <Header funcBack={handleDetailClose} nav={navigation} title={product && detailVisible ? "Producto" : "Catálogo"}/>
+    <View style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 }}>
+        <Header funcBack={notesVisible ? handleNotesClose : featuresVisible ? handleFeaturesClose : handleDetailClose} nav={navigation} />
         {!detailVisible && <SubHeader searching={searching} title={"Otros Productos"} />}
         <ToastManager width={300} />
-        {product && detailVisible ? (
+        <ScrollView>
+        {notesVisible ? (
+          <ScrollView style={{padding:10}}>
+            <Text numberOfLines={20} ellipsizeMode="tail" style={{fontWeight:500}}>{product.notes}</Text>
+          </ScrollView>
+        ) : featuresVisible ? (
+          <ScrollView style={{padding:10}}>
+            <Text style={{fontWeight:400, }}>Código DL</Text>
+            <Text style={{fontWeight:500}}>{product.code}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text  style={{fontWeight:400, }}>Descripción</Text>
+            <Text numberOfLines={4} ellipsizeMode="tail" style={{fontWeight:500}}>{product.name}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>Marca</Text>
+            <Text style={{fontWeight:500}}>{product.brand}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>Tipo de producto</Text>
+            <Text style={{fontWeight:500}}>{product.type}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>Sección</Text>
+            <Text style={{fontWeight:500}}>{product.section}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>Grupo</Text>
+            <Text style={{fontWeight:500}}>{product.group}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>Subgrupo</Text>
+            <Text style={{fontWeight:500}}>{product.subgroup}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>N° de parte</Text>
+            <Text style={{fontWeight:500}}>{product.partNum}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>Unidad de medida</Text>
+            <Text style={{fontWeight:500}}>{product.unity}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>Precio de lista</Text>
+            <Text style={{fontWeight:500}}>ARS {formatPrice(product.listPrice.toFixed(2))}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>Descuento</Text>
+            <Text style={{fontWeight:500}}>{product.disc}%</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>Pecio neto</Text>
+            <Text style={{fontWeight:500}}>ARS {formatPrice(product.neto.toFixed(2))}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+            <Text style={{fontWeight:400, }}>Stock</Text>
+            <Text style={{width:"20%", textAlign:"center",fontWeight:500,backgroundColor:product.stock === "alto" ? "green" : "red", padding: 4, borderRadius: 10, fontSize:12, color:"white"}}>Stock {product.stock}</Text>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:10,width: '100%' }} />
+          </ScrollView>
+        ) : detailVisible ? (
           <View>
             <Carousel/>
             <View style={{padding:10}}>
@@ -176,10 +242,12 @@ const OtherProducts = ({ navigation }) => {
                   <Text style={{ color: 'white' }}>Agregar al pedido</Text>
                 </TouchableOpacity>
               </View>
-              <View style={{marginTop:20,flexDirection:"row",justifyContent:"space-between", alignItems:"center"}}>
-                <Text style={{fontSize:20}}>Características</Text>
-                <Icon name="right" size={25} color="black" />
-              </View>
+              <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:0,width: '100%' }} />
+
+              <TouchableOpacity onPress={handleFeaturesOpen} style={{ marginTop:10,flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Text style={{fontSize:20}}>Características</Text>
+                  <Icon name="right" size={25} color="black" />
+              </TouchableOpacity>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap:20, marginTop:10 }}>
                 <View style={{ width: '50%' }}>
                   <Text style={{fontWeight:400, }}>Marca</Text>
@@ -212,9 +280,14 @@ const OtherProducts = ({ navigation }) => {
                   <Text  style={{fontWeight:500}}>{product.group}</Text>
                 </View>
               </View>
-              <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 20, marginBottom:0,width: '100%' }} />
+              <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:0,width: '100%' }} />
+              <TouchableOpacity onPress={handleNotesOpen} style={{ marginTop:10,flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Text style={{fontSize:20}}>Notas</Text>
+                  <Icon name="right" size={25} color="black" />
+              </TouchableOpacity>
+              <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:0,width: '100%' }} />
 
-              <View style={{alignItems:"center", marginTop:10}}>
+              <View style={{alignItems:"center", marginTop:0}}>
                 <TouchableOpacity style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5, marginTop:20 }}>
                   <Text style={{  }}>Relaciones</Text>
                 </TouchableOpacity>
@@ -302,7 +375,8 @@ const OtherProducts = ({ navigation }) => {
       </View>
 
         )}
-    </ScrollView>
+        </ScrollView>
+    </View>
   )
 }
 

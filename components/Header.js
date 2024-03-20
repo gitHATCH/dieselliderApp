@@ -63,7 +63,7 @@ const Header = ({nav, title, search, funcBack, searchValue, searching, changeSea
         <View style={{width:screenWidth*0.95,flexDirection:"row", alignItems:"center", justifyContent:"space-between", gap: 20}}>
 
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
-            {title !== "Domicilio de envío" && title !== "Producto"  && title !== "Pedido" && title !== "Comprobante" ? (
+            {title !== "Domicilio de envío" && title !== "Producto"  && title !== "Pedido" && title !== "Comprobante"  && title !== "Características" && title !== "Notas" ? (
               <TouchableOpacity onPress={handleMenuPress}>
                 <Icon name="menu" size={25} color="white" />
               </TouchableOpacity>
@@ -81,7 +81,7 @@ const Header = ({nav, title, search, funcBack, searchValue, searching, changeSea
               </TouchableOpacity>
               )}
 
-            {user && title !== "Pedido Actual" && title !== "Domicilio de envío" && title !== "Producto" && title !== "Pedido" && title !== "Comprobante" && (
+            {user && title !== "Pedido Actual" && title !== "Domicilio de envío" && title !== "Producto" && title !== "Pedido" && title !== "Comprobante" && title !== "Características" && title !== "Notas" && (
               <TouchableOpacity onPress={() => nav.navigate("MyOrder")} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
                 <Icon name="shopping-cart" size={22} color="white" />
               </TouchableOpacity>

@@ -164,9 +164,10 @@ const AccountCondition = ({ navigation }) => {
 
   return (
     
-    <ScrollView  style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 , minHeight: Math.round(windowHeight) }}>
+    <View  style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 , minHeight: Math.round(windowHeight) }}>
         <Header funcBack={handleDetailClose} nav={navigation} title={actualVoucher && detailVisible ? "Comprobante" : "Cuenta Corriente"}/>
         {!actualVoucher && !detailVisible && <SubHeader title={"Cuenta Corriente"} notTitle={true} setActual={handleActualView} actual={actualView}/> }
+        <ScrollView>
         {actualVoucher && detailVisible ? (
           <View style={{padding:10}}>
             <Text style={{fontWeight:400, }}>Movimiento</Text>
@@ -502,19 +503,23 @@ const AccountCondition = ({ navigation }) => {
                           />
                         </View>
                         <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 20, width: '100%' }} />
-                        <TouchableOpacity style={{ flexDirection:"row",backgroundColor: '#d8d8d8', padding: 10, marginVertical: 10, width: '100%', alignItems: 'center', borderRadius: 5, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5, gap:10 }}>
+                        
+                        <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: focusedInput === 'textarea' ? 'blue' : 'gray', width: '100%' }}>
+                          <TextInput
+                            placeholder="Mensaje al área de Cuentas Corrientes (opcional)"
+                            multiline
+                            numberOfLines={4}
+                            value={textAreaMsg}
+                            onFocus={() => setFocusedInput('textarea')}
+                            onBlur={() => setFocusedInput(null)}
+                            onChange={(text) => setTextAreaMsg(text)}
+                            style={{ padding: 10,width: '100%', borderRadius: 5, borderColor:"gray", borderWidth:1, marginTop:20 }}
+                          />
+                        </View>
+                        <TouchableOpacity style={{ marginTop:20,flexDirection:"row",backgroundColor: '#d8d8d8', padding: 10, marginVertical: 10, width: '100%', alignItems: 'center', borderRadius: 5, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5, gap:10 }}>
                           <Icon name="camera" size={25} color="black" />
                           <Text>Tomar foto del comprobante de pago</Text>
                         </TouchableOpacity>
-                      
-                        <TextInput
-                          placeholder="Mensaje al área de Cuentas Corrientes (opcional)"
-                          multiline
-                          numberOfLines={4}
-                          value={textAreaMsg}
-                          onChange={(text) => setTextAreaMsg(text)}
-                          style={{ padding: 10,width: '100%', borderRadius: 5, borderColor:"gray", borderWidth:1, marginTop:20 }}
-                        />
                          <TouchableOpacity disabled style={{backgroundColor: 'orange', padding: 10, marginVertical: 10, width: '100%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5, marginTop:20 }}>
                           <Text style={{ color: 'white' }}>Siguiente</Text>
                         </TouchableOpacity>
@@ -526,7 +531,8 @@ const AccountCondition = ({ navigation }) => {
           </View>
 
         )}
-    </ScrollView>
+        </ScrollView>
+    </View>
   )
 }
 
