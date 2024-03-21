@@ -98,7 +98,7 @@ const TurboParts = ({ navigation }) => {
   };
 
   const addToOrder = () => {
-    addProduct(product);
+    addProduct({...product, quantity:1});
     setModalVisible(false);
     Toast.success('Agregado correctamente!')
   }

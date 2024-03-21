@@ -97,7 +97,7 @@ const OrderStatus = ({ navigation }) => {
   };
 
   const addToOrder = () => {
-    addProduct(product);
+    addProduct({...product, quantity:1});
     setModalVisible(false);
     Toast.success('Agregado correctamente!')
   }
@@ -457,6 +457,7 @@ const OrderStatus = ({ navigation }) => {
                   }, 0) + order.iva + order.otherTaxes)}</Text>
               </View>
             </View>
+            
             <View style={{ marginTop:20 }}>
                 <Text style={{fontWeight:400, }}>Facturar el día</Text>
             </View>

@@ -1,6 +1,6 @@
 // HomeScreen.js
-import React, { useState } from 'react';
-import { View, Text, StatusBar, FlatList, TouchableOpacity, Image, Dimensions, ScrollView  } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StatusBar, FlatList, TouchableOpacity, Image, Dimensions, ScrollView, LogBox  } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Modal from 'react-native-modal';
@@ -15,10 +15,9 @@ import ToastManager, { Toast } from 'toastify-react-native'
 import Carousel from '../components/Carousel';
 
 //TODO: Mostrar los productos buscados, sino nada un cartel o la busqueda anterior
-//TODO: Reemplazar carrucel 
 //TODO: Ver filtro y Precios
-//TODO: Utilizar state search y pasarlo a header
 //TODO: Hacer lo de relaciones
+
 
 const HomeScreen = ({ navigation }) => {
   const {  
@@ -62,6 +61,10 @@ const HomeScreen = ({ navigation }) => {
   const [visible, setIsVisible] = useState(false);
   
   const { width: screenWidth } = Dimensions.get('window');
+
+  useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead.']);
+  }, [])
 
   const handleActualView = (title) => {
     setActualView(title);
@@ -118,7 +121,7 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const addToOrder = () => {
-    addProduct(product);
+    addProduct({...product, quantity:1});
     setModalVisible(false);
     Toast.success('Agregado correctamente!')
   }

@@ -16,10 +16,9 @@ import UserData from './screens/UserData';
 import MyOrder from './screens/MyOrder';
 
 const Stack = createNativeStackNavigator();
-//TODO: Agregar FlatList de productos en cada pedido
 //TODO: Agregar Despiece de productos
 //TODO: Agregar lo de relaciones
-//TODO: Agregar lo de pedidos
+
 //TODO: Preguntar por lo de la camara en CC Informar un pago y que hay en siguiente, preguntar lo de desacrgar comprobante, preguntar lo de despiece
 //TODO: Averiguar para descargar un xml y guardarlo localmente y luego acceder a este
 
