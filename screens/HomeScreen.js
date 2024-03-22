@@ -36,12 +36,10 @@ const HomeScreen = ({ navigation }) => {
 
   const [featuresVisible, setFeaturesVisible] = useState(false);
   const [notesVisible, setNotesVisible] = useState(false);
-
- const images = [Image1, Image2, Image3];
-
+  const [relationsVisible, setRelationsVisible] = useState(false);
  
   const [picker, setPicker] = useState("1 Unidad");
-  //tODO: Agregar Notas y Screen de caracteristicas
+  //TODO: Arreglar modal al elegir producto en relaciones
   const [products, setProducts] = useState([
     { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[1]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger"},
     { state: "Disponible", name: "Turbo TB2535", code:"465445-0002", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"Inhabilitado",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger"},
@@ -83,6 +81,17 @@ const HomeScreen = ({ navigation }) => {
     const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     return `${formattedIntegerPart},${decimalPart}`;
   };
+
+  const handleRelationsOpen = () => {
+    setModalVisible(false);
+    setActualView("Reemp. s/mod")
+    setRelationsVisible(true);
+  }
+
+  const handleRelationsClose = () => {
+    setActualView("Códigos DL")
+    setRelationsVisible(false);
+  }
 
   const handleDetailOpen = () => {
     setModalVisible(false);
@@ -157,11 +166,20 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 }}>
-      <Header searchValue={search} changeSearchValue={handleSearchValue} searching={searching} changeSearching={handleSearching} funcBack={notesVisible ? handleNotesClose : featuresVisible ? handleFeaturesClose : handleDetailClose} nav={navigation} title={notesVisible ? "Notas" : featuresVisible ? "Características" : detailVisible ? "Producto" : "Catálogo"} search={!detailVisible && true}/>
-      {!detailVisible && <SubHeader searching={searching} title={"Turbos y Conjuntos"} setActual={handleActualView} actual={actualView}/>}
+      <Header searchValue={search} changeSearchValue={handleSearchValue} searching={searching} changeSearching={handleSearching} funcBack={relationsVisible ? handleRelationsClose : notesVisible ? handleNotesClose : featuresVisible ? handleFeaturesClose : handleDetailClose} nav={navigation} title={relationsVisible ? "Relaciones" : notesVisible ? "Notas" : featuresVisible ? "Características" : detailVisible ? "Producto" : "Catálogo"} search={(!detailVisible && !relationsVisible) && true}/>
+      {(!detailVisible || relationsVisible) && <SubHeader searching={searching} relation={relationsVisible ? product : null} title={relationsVisible ? "Relaciones" : "Turbos y Conjuntos"} setActual={handleActualView} actual={actualView}/>}
       <ToastManager width={300} />
       <View style={{ flex: 1}}>
-        {notesVisible ? (
+        {relationsVisible ? (
+          <View style={{ padding:10 }}>
+          <FlatList
+              data={products}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => index.toString()}
+              ItemSeparatorComponent={renderSeparator}
+            />
+          </View>
+        ) : notesVisible ? (
           <ScrollView style={{padding:10}}>
             <Text numberOfLines={20} ellipsizeMode="tail" style={{fontWeight:500}}>{product.notes}</Text>
           </ScrollView>
@@ -296,7 +314,7 @@ const HomeScreen = ({ navigation }) => {
               <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:0,width: '100%' }} />
 
               <View style={{alignItems:"center", marginTop:0}}>
-                <TouchableOpacity style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5, marginTop:20 }}>
+                <TouchableOpacity onPress={handleRelationsOpen} style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5, marginTop:20 }}>
                   <Text style={{  }}>Relaciones</Text>
                 </TouchableOpacity>
               </View>
@@ -322,7 +340,7 @@ const HomeScreen = ({ navigation }) => {
                     <Icon name="filetext1" size={22} color="black" />
                     <Text style={{fontSize:18, fontWeight:400}}>Detalles</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={{width:"100%",alignItems:"center", flexDirection:"row", gap:20, marginTop:10}} >
+                  <TouchableOpacity onPress={handleRelationsOpen} style={{width:"100%",alignItems:"center", flexDirection:"row", gap:20, marginTop:10}} >
                     <Icon name="fork" size={22} color="black" />
                     <Text style={{fontSize:18, fontWeight:400}}>Relaciones</Text>
                   </TouchableOpacity>

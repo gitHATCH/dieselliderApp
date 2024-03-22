@@ -4,18 +4,24 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
-const SubHeader = ({title, setActual, actual, notTitle, searching}) => {
+const SubHeader = ({title, setActual, actual, notTitle, searching, relation}) => {
 
   const handleAddPress = (content) => {
     setActual(content)
   }
 
   return (
-    <View style={{ backgroundColor: '#1c5560', padding: 10, paddingBottom: (title === "Turbos y Conjuntos" || title === "Cuenta Corriente" || title === "Mis Datos") ? 0 : 10 }}>
+    <View style={{ backgroundColor: '#1c5560', padding: 10, paddingBottom: (title === "Relaciones" || title === "Turbos y Conjuntos" || title === "Cuenta Corriente" || title === "Mis Datos") ? 0 : 10 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
-          {!notTitle && <Text style={{ color: 'white', fontSize: 22, fontWeight: 500 }}>{title}</Text>}
-        </View>
+        {relation ? (
+          <View style={{ flexDirection: 'column' }}>
+            <Text style={{ color: 'white', fontSize: 16, fontWeight: 500 }}>{relation.name}</Text>
+            <Text style={{ color: 'white', fontSize: 16, fontWeight: 400, marginTop:10 }}>{relation.code}</Text>
+          </View>        ) : (
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
+            {!notTitle && <Text style={{ color: 'white', fontSize: 22, fontWeight: 500 }}>{title}</Text>}
+          </View>
+        )}
         {title === "Turbos y Conjuntos" && (
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
             {searching && (
@@ -30,6 +36,22 @@ const SubHeader = ({title, setActual, actual, notTitle, searching}) => {
           </View>
         )}
       </View>
+      {title === "Relaciones" && (
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 15 }}>
+          <TouchableOpacity style={{ flex: 1 }} onPress={() => handleAddPress("Reemp. s/mod")}>
+            <Text style={{ fontSize: 15, color: "white", textAlign: "center", fontWeight:actual === "Reemp. s/mod" ? 700 : 400 }}>Reemp. s/mod</Text>
+            <View style={{ borderBottomWidth: 6, borderBottomColor: actual === "Reemp. s/mod" ? "green" : "transparent", marginTop: 5 }} />
+          </TouchableOpacity>
+          <TouchableOpacity style={{ flex: 1 }} onPress={() => handleAddPress("Reemp. c/mod")}>
+            <Text style={{ fontSize: 15, color: "white", textAlign: "center", fontWeight:actual === "Reemp. c/mod" ? 700 : 400 }}>Reemp. c/mod</Text>
+            <View style={{ borderBottomWidth: 6, borderBottomColor: actual === "Reemp. c/mod" ? "green" : "transparent", marginTop: 5 }} />
+          </TouchableOpacity>
+          <TouchableOpacity style={{ flex: 1 }} onPress={() => handleAddPress("Componentes")}>
+            <Text style={{ fontSize: 15, color: "white", textAlign: "center", fontWeight:actual === "Componentes" ? 700 : 400 }}>Componentes</Text>
+            <View style={{ borderBottomWidth: 6, borderBottomColor: actual === "Componentes" ? "green" : "transparent", marginTop: 5 }} />
+          </TouchableOpacity>
+        </View>
+      )}
       {title === "Turbos y Conjuntos" && (
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 15 }}>
           <TouchableOpacity style={{ flex: 1 }} onPress={() => handleAddPress("Códigos DL")}>

@@ -8,6 +8,7 @@ import Header from '../components/Header';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Modal from 'react-native-modal';
 import Carousel from '../components/Carousel';
+import SubHeader from '../components/SubHeader';
 
 const MyOrder = ({ navigation }) => {
   //TODO: En los picker de fechas, si se borra, que se reemplace el state por "" directamente. Ademas, comprobar fechas en pasado y esas cosas.
@@ -30,6 +31,10 @@ const MyOrder = ({ navigation }) => {
   const [detailVisible, setDetailVisible] = useState(false);
   const [featuresVisible, setFeaturesVisible] = useState(false);
   const [notesVisible, setNotesVisible] = useState(false);
+  const [relationsVisible, setRelationsVisible] = useState(false);
+  const [actualView, setActualView] = useState("Reemp. s/mod")
+
+
   const [picker, setPicker] = useState("1 Unidad");
   const [addresses, setAddresses] = useState([
     { addressee: "CONSUMIDOR FINAL", address: "AV. JUAN B. JUSTO 2224 (CASO1)", town: "PUEYRREDON", city: "CORDOBA (CASO1)", province: "CORDOBA", postalCode: 5001, country: "ARGENTINA", transport: "SENDBOX(1)", type:"ENVIO", paymentType: "DESTINO"},
@@ -39,6 +44,7 @@ const MyOrder = ({ navigation }) => {
     { addressee: "CONSUMIDOR FINAL", address: "AV. JUAN B. JUSTO 2224 (CASO5)", town: "PUEYRREDON", city: "CORDOBA (CASO5)", province: "CORDOBA", postalCode: 5001, country: "ARGENTINA", transport: "SENDBOX(5)", type:"ENVIO", paymentType: "DESTINO"},
     { addressee: "CONSUMIDOR FINAL", address: "AV. JUAN B. JUSTO 2224 (CASO6)", town: "PUEYRREDON", city: "CORDOBA (CASO6)", province: "CORDOBA", postalCode: 5001, country: "ARGENTINA", transport: "SENDBOX(6)", type:"ENVIO", paymentType: "ORIGEN"},
   ])
+
   const [address, setAddress] = useState("");
 
   useEffect(() => {
@@ -69,6 +75,17 @@ const MyOrder = ({ navigation }) => {
     setProduct(item);
     setModalVisible(true);
   };
+
+  const handleRelationsOpen = () => {
+    setModalVisible(false);
+    setActualView("Reemp. s/mod")
+    setRelationsVisible(true);
+  }
+
+  const handleRelationsClose = () => {
+    setActualView("Reemp. s/mod")
+    setRelationsVisible(false);
+  }
 
   const handleModalClose = () => {
     setProduct("")
@@ -117,9 +134,15 @@ const MyOrder = ({ navigation }) => {
     setActualDate("");
   };
 
+  const handleActualView = (title) => {
+    setActualView(title);
+  }
+
+ 
+
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity onPress={() => handleModalProdOpen(item)} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+      <TouchableOpacity onPress={() => handleModalOpen(item)} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <View style={{flexDirection: "column", width:"90%"}}>
             <Text numberOfLines={4} ellipsizeMode="tail" style={{width:"90%" }}>
               {`${item.name} - ${item.brand}`}
@@ -146,9 +169,20 @@ const MyOrder = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 }}>
-        <Header nav={navigation} title={notesVisible ? "Notas" : featuresVisible ? "Características" : detailVisible ? "Producto" : "Pedido Actual"} funcBack={notesVisible ? handleNotesClose : featuresVisible ? handleFeaturesClose : handleDetailClose}/>
+        <Header nav={navigation} title={relationsVisible ? "Relaciones" : notesVisible ? "Notas" : featuresVisible ? "Características" : detailVisible ? "Producto" : "Pedido Actual"} funcBack={relationsVisible ? handleRelationsClose : notesVisible ? handleNotesClose : featuresVisible ? handleFeaturesClose : handleDetailClose}/>
+        { relationsVisible && <SubHeader relation={relationsVisible ? product : null} title={"Relaciones"} setActual={handleActualView} actual={actualView}/>}
+
         <View style={{ flex: 1}}>
-        {notesVisible ? (
+        {relationsVisible ? (
+          <View style={{ padding:10 }}>
+          <FlatList
+              data={products}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => index.toString()}
+              ItemSeparatorComponent={renderSeparator}
+            />
+          </View>
+        ) : notesVisible ? (
           <ScrollView style={{padding:10}}>
             <Text numberOfLines={20} ellipsizeMode="tail" style={{fontWeight:500}}>{product.notes}</Text>
           </ScrollView>
@@ -278,7 +312,7 @@ const MyOrder = ({ navigation }) => {
               <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:0,width: '100%' }} />
 
               <View style={{alignItems:"center", marginTop:0}}>
-                <TouchableOpacity style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5, marginTop:20 }}>
+                <TouchableOpacity onPress={handleRelationsOpen} style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5, marginTop:20 }}>
                   <Text style={{  }}>Relaciones</Text>
                 </TouchableOpacity>
               </View>
@@ -303,6 +337,10 @@ const MyOrder = ({ navigation }) => {
                       <TouchableOpacity onPress={handleDetailOpen} style={{width:"100%",alignItems:"center", flexDirection:"row", gap:20}} >
                         <Icon name="filetext1" size={22} color="black" />
                         <Text style={{fontSize:18, fontWeight:400}}>Detalles</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={handleRelationsOpen} style={{width:"100%",alignItems:"center", flexDirection:"row", gap:20, marginTop:10}} >
+                        <Icon name="fork" size={22} color="black" />
+                        <Text style={{fontSize:18, fontWeight:400}}>Relaciones</Text>
                       </TouchableOpacity>
                       <TouchableOpacity style={{width:"100%",alignItems:"center", flexDirection:"row", gap:20, marginTop:10}} onPress={handleModalClose}>
                         <Icon name="close" size={22} color="black" />

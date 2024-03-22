@@ -29,6 +29,9 @@ const OtherProducts = ({ navigation }) => {
 
   const [featuresVisible, setFeaturesVisible] = useState(false);
   const [notesVisible, setNotesVisible] = useState(false);
+  const [relationsVisible, setRelationsVisible] = useState(false);
+  const [actualView, setActualView] = useState("Reemp. s/mod")
+
 
   const [products, setProducts] = useState([
     { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[1]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger"},
@@ -51,6 +54,17 @@ const OtherProducts = ({ navigation }) => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead.']);
     setSearching(false)
   }, [navigation])
+
+  const handleRelationsOpen = () => {
+    setModalVisible(false);
+    setActualView("Reemp. s/mod")
+    setRelationsVisible(true);
+  }
+
+  const handleRelationsClose = () => {
+    setActualView("Reemp. s/mod")
+    setRelationsVisible(false);
+  }
 
   const handleSearching = (value) => {
     setSearching(value);
@@ -104,6 +118,10 @@ const OtherProducts = ({ navigation }) => {
     Toast.success('Agregado correctamente!')
   }
 
+  const handleActualView = (title) => {
+    setActualView(title);
+  }
+
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity onPress={() => handleModalOpen(item)} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -150,15 +168,20 @@ const OtherProducts = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 }}>
-        <Header funcBack={notesVisible ? handleNotesClose : featuresVisible ? handleFeaturesClose : handleDetailClose} nav={navigation} />
-        {!detailVisible && <SubHeader searching={searching} title={"Otros Productos"} />}
+        <Header funcBack={relationsVisible ? handleRelationsClose : notesVisible ? handleNotesClose : featuresVisible ? handleFeaturesClose : handleDetailClose} nav={navigation} title={relationsVisible ? "Relaciones" : notesVisible ? "Notas" : featuresVisible ? "Características" : detailVisible ? "Producto" : "Catálogo"}/>
+        {(!detailVisible || relationsVisible) && <SubHeader relation={relationsVisible ? product : null} setActual={handleActualView} actual={actualView} title={relationsVisible ? "Relaciones" : "Otros Productos"} />}
         <ToastManager width={300} />
         <ScrollView>
-        {notesVisible ? (
-          <ScrollView style={{padding:10}}>
-            <Text numberOfLines={20} ellipsizeMode="tail" style={{fontWeight:500}}>{product.notes}</Text>
-          </ScrollView>
-        ) : featuresVisible ? (
+        {relationsVisible ? (
+          <View style={{ padding:10 }}>
+          <FlatList
+              data={products}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => index.toString()}
+              ItemSeparatorComponent={renderSeparator}
+            />
+          </View>
+        ) :  featuresVisible ? (
           <ScrollView style={{padding:10}}>
             <Text style={{fontWeight:400, }}>Código DL</Text>
             <Text style={{fontWeight:500}}>{product.code}</Text>
@@ -288,7 +311,7 @@ const OtherProducts = ({ navigation }) => {
               <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:0,width: '100%' }} />
 
               <View style={{alignItems:"center", marginTop:0}}>
-                <TouchableOpacity style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5, marginTop:20 }}>
+                <TouchableOpacity onPress={handleRelationsOpen} style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5, marginTop:20 }}>
                   <Text style={{  }}>Relaciones</Text>
                 </TouchableOpacity>
               </View>
@@ -357,7 +380,7 @@ const OtherProducts = ({ navigation }) => {
                     <Icon name="filetext1" size={22} color="black" />
                     <Text style={{fontSize:18, fontWeight:400}}>Detalles</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={{width:"100%",alignItems:"center", flexDirection:"row", gap:20, marginTop:10}} >
+                  <TouchableOpacity onPress={handleRelationsOpen} style={{width:"100%",alignItems:"center", flexDirection:"row", gap:20, marginTop:10}} >
                     <Icon name="fork" size={22} color="black" />
                     <Text style={{fontSize:18, fontWeight:400}}>Relaciones</Text>
                   </TouchableOpacity>

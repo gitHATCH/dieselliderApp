@@ -17,10 +17,13 @@ import MyOrder from './screens/MyOrder';
 
 const Stack = createNativeStackNavigator();
 //TODO: Agregar Despiece de productos
-//TODO: Agregar lo de relaciones
+//TODO: Corregir lo de ver detalles en relaciones
+//TODO: Verificar lo de SafeArea
 
 //TODO: Preguntar por lo de la camara en CC Informar un pago y que hay en siguiente, preguntar lo de desacrgar comprobante, preguntar lo de despiece
 //TODO: Averiguar para descargar un xml y guardarlo localmente y luego acceder a este
+//TODO: Averiguar despliegue
+//TODO: Averiguar rotacion de pantalla
 
 
 const App = () => {

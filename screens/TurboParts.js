@@ -25,6 +25,10 @@ const TurboParts = ({ navigation }) => {
   const [featuresVisible, setFeaturesVisible] = useState(false);
   const [notesVisible, setNotesVisible] = useState(false);
 
+  const [relationsVisible, setRelationsVisible] = useState(false);
+  const [actualView, setActualView] = useState("Reemp. s/mod")
+
+
   const [products, setProducts] = useState([
     { state: "Disponible", name: "Turbo 805058-01 CO MP2-APL986 Ford Ranger", code:"105-212[1]", neto: 262744.04, brand: "Master Power", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger"},
     { state: "Disponible", name: "Turbo TB2535", code:"465445-0002", neto: 262744.04, brand: "Garret", type: "Turbo", section:"B", group:"TURBOS NUEVOS", subgroup:"TURBOS NUEVOS",partNum:"105-212[1]",unity:"Unidad",listPrice:262744.04,disc:0,stock:"alto",mark:"Inhabilitado",notes:"Turbo 805058-01 CO MP2-APL986 Ford Ranger"},
@@ -50,6 +54,17 @@ const TurboParts = ({ navigation }) => {
 
   const [focusedInput, setFocusedInput] = useState(null);
   const [errorText, setErrorText] = useState('');
+
+  const handleRelationsOpen = () => {
+    setModalVisible(false);
+    setActualView("Reemp. s/mod")
+    setRelationsVisible(true);
+  }
+
+  const handleRelationsClose = () => {
+    setActualView("Reemp. s/mod")
+    setRelationsVisible(false);
+  }
  
   const handleSearching = (value) => {
     setSearching(value);
@@ -103,6 +118,10 @@ const TurboParts = ({ navigation }) => {
     Toast.success('Agregado correctamente!')
   }
 
+  const handleActualView = (title) => {
+    setActualView(title);
+  }
+
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity onPress={() => handleModalOpen(item)} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -151,11 +170,20 @@ const TurboParts = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 }}>
-      <Header funcBack={notesVisible ? handleNotesClose : featuresVisible ? handleFeaturesClose : handleDetailClose} nav={navigation} title={notesVisible ? "Notas" : featuresVisible ? "Características" : detailVisible ? "Producto" : "Catálogo"}/>
-      {!detailVisible && <SubHeader searching={searching} title={"Partes de Turbos"} />}
+      <Header funcBack={relationsVisible ? handleRelationsClose : notesVisible ? handleNotesClose : featuresVisible ? handleFeaturesClose : handleDetailClose} nav={navigation} title={relationsVisible ? "Relaciones" : notesVisible ? "Notas" : featuresVisible ? "Características" : detailVisible ? "Producto" : "Catálogo"}/>
+      {(!detailVisible || relationsVisible) && <SubHeader title={relationsVisible ? "Relaciones" : "Partes de Turbos"} relation={relationsVisible ? product : null} setActual={handleActualView} actual={actualView}/>}
       <ToastManager width={300} />
       <ScrollView>
-      {notesVisible ? (
+      {relationsVisible ? (
+          <View style={{ padding:10 }}>
+          <FlatList
+              data={products}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => index.toString()}
+              ItemSeparatorComponent={renderSeparator}
+            />
+          </View>
+        ) : notesVisible ? (
           <ScrollView style={{padding:10}}>
             <Text numberOfLines={20} ellipsizeMode="tail" style={{fontWeight:500}}>{product.notes}</Text>
           </ScrollView>
@@ -289,7 +317,7 @@ const TurboParts = ({ navigation }) => {
               <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:0,width: '100%' }} />
 
               <View style={{alignItems:"center", marginTop:0}}>
-                <TouchableOpacity style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5, marginTop:20 }}>
+                <TouchableOpacity onPress={handleRelationsOpen} style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5, marginTop:20 }}>
                   <Text style={{  }}>Relaciones</Text>
                 </TouchableOpacity>
               </View>
@@ -368,7 +396,7 @@ const TurboParts = ({ navigation }) => {
                     <Icon name="filetext1" size={22} color="black" />
                     <Text style={{fontSize:18, fontWeight:400}}>Detalles</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={{width:"100%",alignItems:"center", flexDirection:"row", gap:20, marginTop:10}} >
+                  <TouchableOpacity onPress={handleRelationsOpen} style={{width:"100%",alignItems:"center", flexDirection:"row", gap:20, marginTop:10}} >
                     <Icon name="fork" size={22} color="black" />
                     <Text style={{fontSize:18, fontWeight:400}}>Relaciones</Text>
                   </TouchableOpacity>

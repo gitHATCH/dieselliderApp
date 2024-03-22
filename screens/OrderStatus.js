@@ -8,6 +8,8 @@ import Header from '../components/Header';
 import ToastManager, { Toast } from 'toastify-react-native'
 import Carousel from '../components/Carousel';
 import { useUserContext } from '../hooks/UserContext';
+import SubHeader from '../components/SubHeader';
+
 
 const OrderStatus = ({ navigation }) => {
   const [advanced, setAdvanced] = useState(false);
@@ -40,6 +42,10 @@ const OrderStatus = ({ navigation }) => {
   const [detailVisible, setDetailVisible] = useState(false);
   const [featuresVisible, setFeaturesVisible] = useState(false);
   const [notesVisible, setNotesVisible] = useState(false);
+  const [relationsVisible, setRelationsVisible] = useState(false);
+  const [actualView, setActualView] = useState("Reemp. s/mod")
+
+
   const windowHeight = useWindowDimensions().height;
 
   const [orders, setOrders] = useState([
@@ -86,6 +92,17 @@ const OrderStatus = ({ navigation }) => {
     const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     return `${formattedIntegerPart},${decimalPart}`;
   };
+
+  const handleRelationsOpen = () => {
+    setModalVisible(false);
+    setActualView("Reemp. s/mod")
+    setRelationsVisible(true);
+  }
+
+  const handleRelationsClose = () => {
+    setActualView("Reemp. s/mod")
+    setRelationsVisible(false);
+  }
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -184,6 +201,10 @@ const OrderStatus = ({ navigation }) => {
     setOrder("");
   }
 
+  const handleActualView = (title) => {
+    setActualView(title);
+  }
+
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity onPress={() => handleModalOpen(item)} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -245,11 +266,22 @@ const OrderStatus = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 , minHeight: Math.round(windowHeight)}}>
-        <Header funcBack={featuresVisible ? handleFeaturesClose : notesVisible ? handleNotesClose : productVisible ? handleProductVisibleClose : handleDetailClose}  nav={navigation} title={notesVisible ? "Notas" : featuresVisible ? "Características" : productVisible ? "Producto" : detailVisible ? "Pedido" : "Estado de Pedidos"}/>
+        <Header funcBack={relationsVisible ? handleRelationsClose : featuresVisible ? handleFeaturesClose : notesVisible ? handleNotesClose : productVisible ? handleProductVisibleClose : handleDetailClose}  nav={navigation} title={notesVisible ? "Notas" : featuresVisible ? "Características" : productVisible ? "Producto" : detailVisible ? "Pedido" : "Estado de Pedidos"}/>
+        { relationsVisible && <SubHeader relation={relationsVisible ? product : null} title={"Relaciones"} setActual={handleActualView} actual={actualView}/>}
+
         <ToastManager width={300} />
 
         <ScrollView>
-        {notesVisible ? (
+        {relationsVisible ? (
+          <View style={{ padding:10 }}>
+          <FlatList
+              data={order.products}
+              renderItem={renderItemProduct}
+              keyExtractor={(item, index) => index.toString()}
+              ItemSeparatorComponent={renderSeparator}
+            />
+          </View>
+        ) : notesVisible ? (
           <ScrollView style={{padding:10}}>
             <Text numberOfLines={20} ellipsizeMode="tail" style={{fontWeight:500}}>{product.notes}</Text>
           </ScrollView>
@@ -384,7 +416,7 @@ const OrderStatus = ({ navigation }) => {
               <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgray', marginTop: 10, marginBottom:0,width: '100%' }} />
 
               <View style={{alignItems:"center", marginTop:0}}>
-                <TouchableOpacity style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5, marginTop:20 }}>
+                <TouchableOpacity  onPress={handleRelationsOpen} style={{ backgroundColor: '#f9f9f9', padding: 10, marginVertical: 10, width: '80%', alignItems: 'center', borderRadius: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, elevation: 5, marginTop:20 }}>
                   <Text style={{  }}>Relaciones</Text>
                 </TouchableOpacity>
               </View>
@@ -615,6 +647,12 @@ const OrderStatus = ({ navigation }) => {
                         <Icon name="filetext1" size={22} color="black" />
                         <Text style={{fontSize:18, fontWeight:400}}>Detalles</Text>
                       </TouchableOpacity>
+                      {detailVisible && (
+                        <TouchableOpacity onPress={handleRelationsOpen} style={{width:"100%",alignItems:"center", flexDirection:"row", gap:20, marginTop:10}} >
+                          <Icon name="fork" size={22} color="black" />
+                          <Text style={{fontSize:18, fontWeight:400}}>Relaciones</Text>
+                        </TouchableOpacity>
+                      )}
                       <TouchableOpacity style={{width:"100%",alignItems:"center", flexDirection:"row", gap:20, marginTop:10}} onPress={modalProdVisible ? handleModalProdClose : handleModalClose}>
                         <Icon name="close" size={22} color="black" />
                         <Text style={{fontSize:18, fontWeight:400}}>Cancelar</Text>
